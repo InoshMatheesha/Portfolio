@@ -1,7 +1,5 @@
 # 🔐 Cyber Security Portfolio - Inosh Matheesha
 
-![Portfolio Preview](nav-logo.png)
-
 A professional, modern, and responsive portfolio website designed for a Cyber Security Undergraduate. This portfolio showcases projects, skills, articles, and provides a way to get in touch. Built with a focus on aesthetics, performance, and user experience, featuring a sleek glassmorphism design and cyber-themed animations.
 
 ## 🚀 Live Demo
@@ -87,3 +85,4 @@ const webhookUrl = 'YOUR_DISCORD_WEBHOOK_URL';
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
+
