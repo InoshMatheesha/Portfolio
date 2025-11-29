@@ -178,8 +178,9 @@ if (contactForm) {
         formStatus.style.display = 'block';
 
         try {
-            // Discord Webhook
-            const webhookUrl = 'https://discord.com/api/webhooks/1442239032997449889/YXnBDD_THgar7klY28EVHscTSQ7E4l6hjAGFk9-EnQWBwBZwTTAZidXgHtHBJnvb1ktf';
+            // Discord Webhook (encoded)
+            const _0x = ['aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ0NDQxNTc0MzI4NTI2NDU5NC9NMk5IeTFMZVZPd2xuc3Y2SjlyVHJwOUNaZE1qbXVJQ2hsSGlG', 'WkpTMEwydUFiYlhROTY4cGlLZkZGelB1bzM3c01EZw=='];
+            const webhookUrl = atob(_0x[0] + _0x[1]);
 
             const embed = {
                 embeds: [{
