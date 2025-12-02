@@ -76,6 +76,7 @@ body.light-mode {
 
 html {
     scroll-behavior: smooth;
+    scroll-padding-top: 100px;
     font-size: 16px;
 }
 
@@ -596,7 +597,7 @@ body.light-mode .theme-toggle .fa-sun {
     border: none;
     transition: all var(--transition-normal);
     position: relative;
-    overflow: hidden;
+    overflow: hidden !important;
 }
 
 .primary-btn {
@@ -608,6 +609,11 @@ body.light-mode .theme-toggle .fa-sun {
 .primary-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 35px var(--glow-magenta);
+}
+
+.primary-btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 4px 15px var(--glow-cyan);
 }
 
 .primary-btn::before {
@@ -935,14 +941,14 @@ body.light-mode .theme-toggle .fa-sun {
 
 .section-header {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: 0rem;
 }
 
 .section-title {
     font-size: 4rem;
     font-weight: 700;
     font-family: 'Space Grotesk', sans-serif;
-    margin-bottom: 1rem;
+    margin-bottom: -1rem;
 }
 
 .section-subtitle {
@@ -1103,7 +1109,7 @@ body.light-mode .theme-toggle .fa-sun {
 
 /* ========== CONTACT SECTION ========== */
 .contact-section {
-    padding: 0.3rem 2rem;
+    padding: 0 2rem;
     max-width: 1200px;
     margin: 0 auto;
 }

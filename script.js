@@ -242,22 +242,36 @@ const buttons = document.querySelectorAll('.cta-btn, .glass-btn');
 
 buttons.forEach(button => {
     button.addEventListener('click', function (e) {
+        // Remove any existing ripples first
+        const existingRipples = this.querySelectorAll('.ripple');
+        existingRipples.forEach(r => r.remove());
+        
         const ripple = document.createElement('span');
         const rect = this.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
+        const size = Math.max(rect.width, rect.height) * 2;
         const x = e.clientX - rect.left - size / 2;
         const y = e.clientY - rect.top - size / 2;
 
-        ripple.style.width = ripple.style.height = size + 'px';
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
+        ripple.style.cssText = `
+            position: absolute;
+            width: ${size}px;
+            height: ${size}px;
+            left: ${x}px;
+            top: ${y}px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: ripple-animation 0.5s ease-out forwards;
+            pointer-events: none;
+            z-index: 0;
+        `;
         ripple.className = 'ripple';
 
         this.appendChild(ripple);
 
         setTimeout(() => {
             ripple.remove();
-        }, 600);
+        }, 500);
     });
 });
 
@@ -265,22 +279,13 @@ buttons.forEach(button => {
 const style = document.createElement('style');
 style.textContent = `
     .cta-btn, .glass-btn {
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .ripple {
-        position: absolute;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.6);
-        transform: scale(0);
-        animation: ripple-animation 0.6s ease-out;
-        pointer-events: none;
+        position: relative !important;
+        overflow: hidden !important;
     }
     
     @keyframes ripple-animation {
         to {
-            transform: scale(4);
+            transform: scale(1);
             opacity: 0;
         }
     }
