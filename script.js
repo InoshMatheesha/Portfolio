@@ -1,7 +1,3 @@
-// ============================================
-// CYBER BENTO GRID - PROFESSIONAL JAVASCRIPT
-// Refined Animations and Interactions
-// ============================================
 
 // ========== VARIABLES ==========
 const typedTextElement = document.getElementById('typed-text');
