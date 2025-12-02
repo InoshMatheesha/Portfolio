@@ -407,7 +407,36 @@ body.light-mode .theme-toggle .fa-sun {
 .profile-role {
     color: var(--text-secondary);
     font-size: 1.1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+}
+
+.availability-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #00ff88;
+    margin-bottom: 1.5rem;
+}
+
+.availability-badge i {
+    font-size: 0.5rem;
+    animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
 }
 
 .profile-stats {
