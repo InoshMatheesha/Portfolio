@@ -74,11 +74,15 @@ themeToggle.addEventListener('click', toggleTheme);
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const targetId = this.getAttribute('href');
+        const target = document.querySelector(targetId);
         if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+            const navHeight = document.querySelector('.glass-nav').offsetHeight;
+            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
+            
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
             });
         }
     });
