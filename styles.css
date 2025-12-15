@@ -89,9 +89,9 @@ body.light-mode .glass-card {
 }
 
 body.light-mode .glass-nav {
-    background: rgba(255, 255, 255, 0.9);
+    background: transparent;
     border: none;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    box-shadow: none;
 }
 
 body.light-mode .nav-content {
