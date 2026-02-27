@@ -191,23 +191,42 @@ document.querySelectorAll('.project-icon-wrap').forEach(wrap => {
     });
 });
 
-// ========== 3D SCROLL REVEAL ANIMATION ==========
-// Bidirectional: cards animate IN when scrolling into view, OUT when leaving
+// ========== 3D MIST SCROLL REVEAL ==========
 const scrollElements = document.querySelectorAll('[data-scroll]');
+let lastScrollY = window.scrollY;
 
 const scrollObserver = new IntersectionObserver((entries) => {
+    const scrollingDown = window.scrollY >= lastScrollY;
+    lastScrollY = window.scrollY;
+
     entries.forEach(entry => {
+        const el = entry.target;
+        const anim = el.dataset.scroll;
+
         if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
+            // Remove directional class so CSS base hidden state takes over briefly,
+            // then add is-visible to crystallise
+            el.classList.remove('from-top');
+            // tiny rAF so the browser registers the class removal before re-adding visible
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => el.classList.add('is-visible'));
+            });
         } else {
-            // Remove class when element leaves viewport → animate out
-            entry.target.classList.remove('is-visible');
+            el.classList.remove('is-visible');
+            // When leaving viewport apply directional from-top for up-scroll re-entry
+            if (!scrollingDown) {
+                el.classList.add('from-top');
+            } else {
+                el.classList.remove('from-top');
+            }
         }
     });
 }, {
-    threshold: 0.12,
-    rootMargin: '0px 0px -60px 0px'
+    threshold: 0.10,
+    rootMargin: '0px 0px -50px 0px'
 });
+
+window.addEventListener('scroll', () => { lastScrollY = window.scrollY; }, { passive: true });
 
 scrollElements.forEach(el => scrollObserver.observe(el));
 

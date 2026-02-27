@@ -3457,99 +3457,142 @@ textarea.glass-input {
 
 /* Base state for all scroll-animated elements */
 [data-scroll] {
-    will-change: transform, opacity;
-    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity, filter;
+    transition:
+        transform  0.9s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity    0.8s cubic-bezier(0.16, 1, 0.3, 1),
+        filter     0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* --- Animation: Flip Up (3D card flip from bottom) --- */
+/* ============================================================
+   MIST MATERIALISE — base hidden state (scroll DOWN entry)
+   Cards start as blurred, washed-out, deep ghost behind the
+   viewport and crystallise into sharp, colourful cards.
+   ============================================================ */
+
+/* --- Flip Up: rises from below through mist --- */
 [data-scroll="flip-up"] {
     opacity: 0;
-    transform: perspective(1000px) rotateX(25deg) translateY(80px) scale(0.92);
+    transform: perspective(1200px) rotateX(28deg) translateY(90px) translateZ(-80px) scale(0.88);
     transform-origin: bottom center;
+    filter: blur(14px) saturate(0.1) brightness(1.6);
 }
 [data-scroll="flip-up"].is-visible {
     opacity: 1;
-    transform: perspective(1000px) rotateX(0deg) translateY(0) scale(1);
+    transform: perspective(1200px) rotateX(0deg) translateY(0) translateZ(0) scale(1);
+    filter: blur(0px) saturate(1) brightness(1);
 }
 
-/* --- Animation: Flip Left (3D rotation from left) --- */
+/* --- Flip Left: drifts in from left through mist --- */
 [data-scroll="flip-left"] {
     opacity: 0;
-    transform: perspective(1000px) rotateY(-20deg) translateX(-60px) scale(0.93);
+    transform: perspective(1200px) rotateY(-22deg) translateX(-70px) translateZ(-60px) scale(0.90);
     transform-origin: left center;
+    filter: blur(12px) saturate(0.1) brightness(1.5);
 }
 [data-scroll="flip-left"].is-visible {
     opacity: 1;
-    transform: perspective(1000px) rotateY(0deg) translateX(0) scale(1);
+    transform: perspective(1200px) rotateY(0deg) translateX(0) translateZ(0) scale(1);
+    filter: blur(0px) saturate(1) brightness(1);
 }
 
-/* --- Animation: Flip Right (3D rotation from right) --- */
+/* --- Flip Right: drifts in from right through mist --- */
 [data-scroll="flip-right"] {
     opacity: 0;
-    transform: perspective(1000px) rotateY(20deg) translateX(60px) scale(0.93);
+    transform: perspective(1200px) rotateY(22deg) translateX(70px) translateZ(-60px) scale(0.90);
     transform-origin: right center;
+    filter: blur(12px) saturate(0.1) brightness(1.5);
 }
 [data-scroll="flip-right"].is-visible {
     opacity: 1;
-    transform: perspective(1000px) rotateY(0deg) translateX(0) scale(1);
+    transform: perspective(1200px) rotateY(0deg) translateX(0) translateZ(0) scale(1);
+    filter: blur(0px) saturate(1) brightness(1);
 }
 
-/* --- Animation: Zoom Twist (scale + rotate Z) --- */
+/* --- Zoom Twist: spirals out of deep mist --- */
 [data-scroll="zoom-twist"] {
     opacity: 0;
-    transform: perspective(1000px) scale(0.7) rotate3d(0, 0, 1, -8deg) translateZ(-100px);
+    transform: perspective(1200px) scale(0.65) rotate3d(0.3, 0.7, 0.1, -18deg) translateZ(-120px);
+    filter: blur(16px) saturate(0) brightness(1.8);
 }
 [data-scroll="zoom-twist"].is-visible {
     opacity: 1;
-    transform: perspective(1000px) scale(1) rotate3d(0, 0, 1, 0deg) translateZ(0);
+    transform: perspective(1200px) scale(1) rotate3d(0, 0, 0, 0deg) translateZ(0);
+    filter: blur(0px) saturate(1) brightness(1);
 }
 
-/* --- Animation: Rise & Tilt (vertical + subtle tilt) --- */
+/* --- Rise & Tilt: pushes up through ground mist --- */
 [data-scroll="rise-tilt"] {
     opacity: 0;
-    transform: perspective(1000px) rotateX(15deg) rotateY(-5deg) translateY(100px) scale(0.9);
+    transform: perspective(1200px) rotateX(18deg) rotateY(-6deg) translateY(110px) translateZ(-60px) scale(0.88);
+    filter: blur(14px) saturate(0.08) brightness(1.7);
 }
 [data-scroll="rise-tilt"].is-visible {
     opacity: 1;
-    transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1);
+    transform: perspective(1200px) rotateX(0deg) rotateY(0deg) translateY(0) translateZ(0) scale(1);
+    filter: blur(0px) saturate(1) brightness(1);
 }
 
-/* --- Animation: Slide Rotate (diagonal slide with rotation) --- */
+/* --- Slide Rotate: diagonal mist sweep --- */
 [data-scroll="slide-rotate"] {
     opacity: 0;
-    transform: perspective(1000px) rotateZ(6deg) rotateY(10deg) translateX(-80px) translateY(50px);
+    transform: perspective(1200px) rotateZ(7deg) rotateY(14deg) translateX(-90px) translateY(60px) translateZ(-50px);
+    filter: blur(13px) saturate(0.1) brightness(1.6);
 }
 [data-scroll="slide-rotate"].is-visible {
     opacity: 1;
-    transform: perspective(1000px) rotateZ(0deg) rotateY(0deg) translateX(0) translateY(0);
+    transform: perspective(1200px) rotateZ(0deg) rotateY(0deg) translateX(0) translateY(0) translateZ(0);
+    filter: blur(0px) saturate(1) brightness(1);
 }
 
-/* --- Animation: Fade Scale (simple pop-in) --- */
+/* --- Fade Scale: soft mist pop-in for headers --- */
 [data-scroll="fade-scale"] {
     opacity: 0;
-    transform: scale(0.85) translateY(40px);
+    transform: scale(0.82) translateY(50px) translateZ(-40px);
+    filter: blur(18px) saturate(0) brightness(2);
 }
 [data-scroll="fade-scale"].is-visible {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: scale(1) translateY(0) translateZ(0);
+    filter: blur(0px) saturate(1) brightness(1);
 }
 
-/* Stagger delays for grid children */
-[data-scroll-delay="1"] { transition-delay: 0.08s; }
-[data-scroll-delay="2"] { transition-delay: 0.16s; }
-[data-scroll-delay="3"] { transition-delay: 0.24s; }
-[data-scroll-delay="4"] { transition-delay: 0.32s; }
-[data-scroll-delay="5"] { transition-delay: 0.40s; }
-[data-scroll-delay="6"] { transition-delay: 0.48s; }
+/* ============================================================
+   SCROLL-UP ENTRY — cards come from above when scrolling up
+   ============================================================ */
+[data-scroll="flip-up"].from-top {
+    transform: perspective(1200px) rotateX(-28deg) translateY(-90px) translateZ(-80px) scale(0.88);
+    filter: blur(14px) saturate(0.1) brightness(1.6);
+    opacity: 0;
+}
+[data-scroll="rise-tilt"].from-top {
+    transform: perspective(1200px) rotateX(-18deg) rotateY(6deg) translateY(-110px) translateZ(-60px) scale(0.88);
+    filter: blur(14px) saturate(0.08) brightness(1.7);
+    opacity: 0;
+}
+[data-scroll="fade-scale"].from-top {
+    transform: scale(0.82) translateY(-50px) translateZ(-40px);
+    filter: blur(18px) saturate(0) brightness(2);
+    opacity: 0;
+}
 
-/* Section headers get their own animation */
+/* Stagger delays — longer gaps for more dramatic mist wave */
+[data-scroll-delay="1"] { transition-delay: 0.05s; }
+[data-scroll-delay="2"] { transition-delay: 0.15s; }
+[data-scroll-delay="3"] { transition-delay: 0.25s; }
+[data-scroll-delay="4"] { transition-delay: 0.36s; }
+[data-scroll-delay="5"] { transition-delay: 0.47s; }
+[data-scroll-delay="6"] { transition-delay: 0.58s; }
+
+/* Section headers get slightly slower crystallisation */
 .section-header[data-scroll] {
-    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-                opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition:
+        transform  1.1s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity    1.0s cubic-bezier(0.16, 1, 0.3, 1),
+        filter     1.1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Override default hover transform so it combines nicely */
+/* Override tilt hover so it doesn't fight the mist state */
 [data-scroll].glass-card:hover {
     transform: perspective(1000px) translateY(-5px);
 }
@@ -3558,18 +3601,18 @@ textarea.glass-input {
 [data-scroll].article-card:hover,
 [data-scroll].contact-info:hover,
 [data-scroll].contact-form:hover {
-    /* Let JS 3D tilt handle hover transform */
     transform: none;
 }
 
-/* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
     [data-scroll] {
         transition: opacity 0.4s ease !important;
         transform: none !important;
+        filter: none !important;
     }
     [data-scroll].is-visible {
         opacity: 1 !important;
         transform: none !important;
+        filter: none !important;
     }
 }
