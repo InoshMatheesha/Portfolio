@@ -127,28 +127,25 @@ glassCards.forEach(card => {
     });
 });
 
-// ========== SCROLL REVEAL ANIMATION ==========
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
-};
+// ========== 3D SCROLL REVEAL ANIMATION ==========
+// Bidirectional: cards animate IN when scrolling into view, OUT when leaving
+const scrollElements = document.querySelectorAll('[data-scroll]');
 
-const observer = new IntersectionObserver((entries) => {
+const scrollObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+            entry.target.classList.add('is-visible');
+        } else {
+            // Remove class when element leaves viewport → animate out
+            entry.target.classList.remove('is-visible');
         }
     });
-}, observerOptions);
-
-// Observe elements
-document.querySelectorAll('.bento-card, .project-card, .section-header').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(el);
+}, {
+    threshold: 0.12,
+    rootMargin: '0px 0px -60px 0px'
 });
+
+scrollElements.forEach(el => scrollObserver.observe(el));
 
 // ========== GRADIENT MESH ANIMATION (Subtle) ==========
 const gradientMesh = document.querySelector('.gradient-mesh');
