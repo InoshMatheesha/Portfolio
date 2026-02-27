@@ -127,6 +127,70 @@ glassCards.forEach(card => {
     });
 });
 
+// ========== 3D TILT ON ALL CARDS ==========
+const tiltCards = document.querySelectorAll('.showcase-card, .project-card, .article-card, .contact-info, .contact-form');
+
+tiltCards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -6;   // max ±6deg
+        const rotateY = ((x - centerX) / centerX) * 6;
+
+        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+    });
+});
+
+// ========== PROJECT ICON CURSOR-REACTIVE 3D ==========
+document.querySelectorAll('.project-icon-wrap').forEach(wrap => {
+    const icon = wrap.querySelector('.project-icon');
+
+    wrap.addEventListener('mousemove', (e) => {
+        const rect = wrap.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const cx = rect.width  / 2;
+        const cy = rect.height / 2;
+
+        // Normalise -1 → +1 relative to center
+        const nx = (x - cx) / cx;
+        const ny = (y - cy) / cy;
+
+        // Map to degrees: horizontal cursor → rotateY, vertical → rotateX
+        const ry =  nx * 28;   // max ±28deg left-right
+        const rx = -ny * 22;   // max ±22deg up-down
+
+        icon.style.setProperty('--icon-rx', `${ry}deg`);
+        icon.style.setProperty('--icon-ry', `${rx}deg`);
+
+        // Specular highlight position relative to icon
+        const iRect = icon.getBoundingClientRect();
+        const ix = ((e.clientX - iRect.left) / iRect.width)  * 100;
+        const iy = ((e.clientY - iRect.top)  / iRect.height) * 100;
+        icon.style.setProperty('--shine-x', `${ix}%`);
+        icon.style.setProperty('--shine-y', `${iy}%`);
+    });
+
+    wrap.addEventListener('mouseleave', () => {
+        // Spring back smoothly
+        icon.style.transition = 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease';
+        icon.style.setProperty('--icon-rx', '0deg');
+        icon.style.setProperty('--icon-ry', '0deg');
+
+        // Revert to snappy transition after spring-back
+        setTimeout(() => {
+            icon.style.transition = '';
+        }, 620);
+    });
+});
+
 // ========== 3D SCROLL REVEAL ANIMATION ==========
 // Bidirectional: cards animate IN when scrolling into view, OUT when leaving
 const scrollElements = document.querySelectorAll('[data-scroll]');
