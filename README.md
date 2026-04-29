@@ -1,12 +1,12 @@
-# 🔐 Cyber Security Portfolio - Inosh Matheesha
+# Cyber Security Portfolio - Inosh Matheesha
 
 A professional, modern, and responsive portfolio website designed for a Cyber Security Undergraduate. This portfolio showcases projects, skills, articles, and provides a way to get in touch. Built with a focus on aesthetics, performance, and user experience, featuring a sleek glassmorphism design and cyber-themed animations.
 
-## 🚀 Live Demo
+## Live Demo
 
 https://inoshmatheesha.github.io/Portfolio/
 
-## ✨ Features
+## Features
 
 - **🎨 Modern Design**: Sleek glassmorphism UI with an animated gradient mesh background.
 - **🌓 Dark/Light Mode**: Fully functional theme toggle with local storage persistence to save user preference.
