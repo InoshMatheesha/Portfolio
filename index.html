@@ -2,742 +2,733 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Inosh Matheesha - Cyber Security Professional Portfolio">
-    <link rel="icon" type="image/png" href="nav-logo.png">
-    <title>Inosh Matheesha | Cyber Security Portfolio</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description"
+        content="Inosh Matheesha - Cyber Security Undergraduate & Offensive Security Enthusiast Portfolio" />
+    <link rel="icon" type="image/png" href="nav-logo.png" />
+    <title>Inosh Matheesha // Offensive Security & Pentesting</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-    <link rel="stylesheet" href="styles.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-    <!-- Animated Gradient Mesh Background -->
+    <!-- Animated Grid / Gradient Background -->
+    <div class="cyber-grid"></div>
     <div class="gradient-mesh"></div>
 
+    <!-- Noise Overlay -->
+    <div class="noise"></div>
+
+    <!-- Custom Cursor (Desktop Only) -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursor-follower"></div>
+
     <!-- Floating Navigation -->
-    <nav class="glass-nav">
-        <div class="nav-content">
-            <div class="nav-logo">
-                <img src="nav-logo.png" alt="Logo">
-            </div>
-            <div class="nav-links">
-                <a href="#hero" class="nav-link active">Home</a>
-                <a href="#bento" class="nav-link">About</a>
-                <a href="#projects" class="nav-link">Projects</a>
-                <a href="#blog" class="nav-link">Articles</a>
-                <a href="#contact" class="nav-link">Contact</a>
-            </div>
-            <button class="theme-toggle glass-card" id="theme-toggle">
-                <i class="fas fa-moon"></i>
-                <i class="fas fa-sun"></i>
+    <nav class="nav">
+        <a href="#hero" class="nav-logo">
+            <img src="nav-logo.png" alt="IM Logo" class="nav-logo-img" />
+            <span class="nav-logo-text">Inosh</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#about">about</a></li>
+            <li><a href="#skills">skills</a></li>
+            <li><a href="#projects">projects</a></li>
+            <li><a href="#articles">articles</a></li>
+            <li><a href="#contact">contact</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle Theme">
+                <i class="fas fa-moon moon-icon"></i>
+                <i class="fa-solid fa-sun sun-icon"></i>
+            </button>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Navigation Menu">
+                <span></span><span></span>
             </button>
         </div>
     </nav>
 
+    <!-- Mobile Overlay Menu (iOS & Android Optimized) -->
+    <div class="mobile-menu" id="mobile-menu">
+        <div class="mobile-menu-header">
+            <span class="mobile-menu-title">// NAVIGATION</span>
+            <button class="mobile-close-btn" id="mobile-close" aria-label="Close Menu">
+                <i class="fas fa-xmark"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="#about">about</a>
+            <a href="#skills">skills</a>
+            <a href="#projects">projects</a>
+            <a href="#articles">articles</a>
+            <a href="#contact">contact</a>
+        </div>
+        <div class="mobile-menu-footer">
+            <span>SLIIT Cyber Security Undergrad</span>
+        </div>
+    </div>
+
     <!-- Hero Section -->
-    <section id="hero" class="hero-section">
-        <div class="hero-container">
-            <!-- Profile Card (Glassmorphic) -->
-            <div class="profile-card glass-card">
-                <div class="profile-avatar">
-                    <div class="avatar-ring"></div>
-                    <div class="avatar-image">
-                        <img src="profile-avatar.jpg" alt="Inosh Matheesha">
+    <header class="hero" id="hero">
+        <div class="hero-grid">
+            <!-- Left Column: Interactive Terminal Window -->
+            <div class="hero-left">
+                <div class="terminal-window">
+                    <div class="terminal-bar">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span class="terminal-title">inosh@sliit-sec:~$</span>
+                        <span class="terminal-badge">CLI v2.4</span>
                     </div>
-                    <div class="status-indicator"></div>
-                </div>
-                <h1 class="profile-name">
-                    <span class="glitch-text" data-text="Inosh Matheesha">Inosh Matheesha</span>
-                </h1>
-                <p class="profile-role">Cyber Security Undergraduate</p>
-                <span class="availability-badge"><i class="fas fa-circle"></i> Open for opportunities</span>
-                <div class="profile-stats">
-                    <div class="stat">
-                        <span class="stat-value"><i class="fas fa-project-diagram"></i> 13</span>
-                        <span class="stat-label">Projects</span>
+                    <div class="terminal-body" id="terminal">
+                        <div class="line"><span class="prompt">inosh@sec:~$</span> whoami</div>
+                        <div class="line output highlight">Inosh Matheesha [Cyber Security Undergrad @ SLIIT]</div>
+                        <div class="line"><span class="prompt">inosh@sec:~$</span> cat focus.txt</div>
+                        <div class="line output">BadUSB Payloads | ESP32 Frameworks | Web Pentesting | CTFs</div>
+                        <div class="line"><span class="prompt">inosh@sec:~$</span> echo $STATUS</div>
+                        <div class="line output typing-container">
+                            <span class="typing-text" id="typing-line">building tools to secure the digital
+                                world_</span>
+                            <span class="cursor-blink">█</span>
+                        </div>
+                        <div class="line prompt-input-line">
+                            <span class="prompt">inosh@sec:~$</span>
+                            <input type="text" id="cli-input" class="cli-input"
+                                placeholder="Type 'help', 'skills', or 'projects'..." autocomplete="off"
+                                spellcheck="false" />
+                        </div>
                     </div>
-                    <div class="stat">
-                        <span class="stat-value"><i class="fas fa-university"></i> SLIIT</span>
-                        <span class="stat-label">University</span>
+                    <div class="terminal-footer">
+                        <span>Tip: Try typing <code class="cmd-hint">help</code> in terminal CLI line above</span>
                     </div>
-                    <div class="stat">
-                        <span class="stat-value"><i class="fas fa-map-pin"></i> LK</span>
-                        <span class="stat-label">Location</span>
-                    </div>
-                </div>
-                <div class="profile-social">
-                    <a href="https://github.com/InoshMatheesha" target="_blank" class="social-btn glass-btn">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/in/inosh-matheesha-9682b429b/" target="_blank"
-                        class="social-btn glass-btn">
-                        <i class="fab fa-linkedin"></i>
-                    </a>
-                    <a href="https://medium.com/@inoshmatheesha" target="_blank" class="social-btn glass-btn">
-                        <i class="fab fa-medium"></i>
-                    </a>
-                    <a href="mailto:inoshmatheesha@gmail.com" class="social-btn glass-btn">
-                        <i class="fas fa-envelope"></i>
-                    </a>
                 </div>
             </div>
 
-            <!-- Hero Text -->
-            <div class="hero-text">
-                <div class="hero-greeting">Hello, I'm</div>
-                <h2 class="hero-title">
-                    <span class="gradient-text">Cyber Security</span>
-                    <span class="gradient-text">Enthusiast</span>
-                </h2>
-                <div class="hero-description">
-                    <p class="typing-text">
-                        <span id="typed-text"></span>
-                        <span class="cursor-blink">|</span>
-                    </p>
-                </div>
-                <div class="hero-ctas">
-                    <a href="#projects" class="cta-btn primary-btn">
-                        <span>View Projects</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                    <a href="#contact" class="cta-btn glass-btn">
-                        <span>Get in Touch</span>
-                        <i class="fas fa-paper-plane"></i>
-                    </a>
+            <!-- Right Column: Immersive 3D Profile & Floating Text Info -->
+            <div class="hero-right">
+                <!-- Immersive Portrait Background Layer -->
+                <div class="portrait-container">
+                    <div class="portrait-glow"></div>
+                    <div class="portrait-bg-text">_MoOdY_</div>
+                    <img src="OnlyMe.png" alt="Inosh Matheesha Portrait" class="hero-portrait-img" />
                 </div>
 
-                <!-- Floating Keywords -->
-                <div class="floating-keywords">
-                    <span class="keyword"><i class="fas fa-usb"></i> USB HID</span>
-                    <span class="keyword"><i class="fas fa-shield-alt"></i> Email Security</span>
-                    <span class="keyword"><i class="fas fa-puzzle-piece"></i> Browser Extensions</span>
-                    <span class="keyword"><i class="fab fa-python"></i> Python</span>
-                    <span class="keyword"><i class="fas fa-bug"></i> Pentesting</span>
+                <!-- Floating Foreground Info Content -->
+                <div class="hero-profile-content">
+                    <span class="hero-label">// OFFENSIVE SECURITY & RESEARCH</span>
+                    <h1 class="hero-title">
+                        <span class="line-1">Inosh</span>
+                        <span class="line-2">Matheesha</span>
+                    </h1>
+
+                    <p class="hero-tagline">
+                        Cyber Security undergraduate at <strong>SLIIT</strong> specializing in Cyber Security.
+                    </p>
+
+                    <div class="hero-stats-bar">
+                        <div class="stat-pill">
+                            <i class="fas fa-project-diagram"></i>
+                            <span><strong>13+</strong> Projects</span>
+                        </div>
+                        <div class="stat-pill">
+                            <i class="fas fa-university"></i>
+                            <span><strong>SLIIT</strong> Campus</span>
+                        </div>
+                        <div class="stat-pill">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span><strong>Sri Lanka</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="hero-cta">
+                        <a href="#projects" class="btn primary">
+                            <span>View Projects</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="#contact" class="btn ghost">
+                            <span>Get in Touch</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </a>
+                    </div>
+
+                    <div class="social-row">
+                        <a href="https://github.com/InoshMatheesha" target="_blank" rel="noopener"
+                            class="social-icon-btn" title="GitHub" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/inosh-matheesha-9682b429b/" target="_blank" rel="noopener"
+                            class="social-icon-btn" title="LinkedIn" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://medium.com/@inoshmatheesha" target="_blank" rel="noopener"
+                            class="social-icon-btn" title="Medium" aria-label="Medium">
+                            <i class="fab fa-medium"></i>
+                        </a>
+                        <a href="mailto:inoshmatheesha@gmail.com" class="social-icon-btn" title="Email"
+                            aria-label="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+
+                    <div class="hero-status">
+                        <span class="status-dot"></span>
+                        Available for internships...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-hint">
+            <span>scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </header>
+
+    <!-- Section 01: About -->
+    <section class="section about" id="about">
+        <div class="section-header">
+            <span class="section-num">01</span>
+            <h2 class="section-title">About</h2>
+        </div>
+        <div class="about-grid">
+            <div class="about-text">
+                <p class="lead">
+                    I’m a <strong>Cyber Security undergraduate</strong> at <strong>Sri Lanka Institute of Information
+                        Technology (SLIIT)</strong>
+                    with a passion for offensive security, threat analysis, and building ethical security tools.
+                </p>
+                <p>
+                    I don't just study security concepts — I actively build custom hardware payloads (Arduino ProMicro
+                    BadUSB),
+                    WiFi security frameworks (ESP32 ZeNeOn), browser security extensions (ShadowByte SafePaste), and CTF
+                    challenge environments.
+                </p>
+                <p>
+                    My work combines creative problem solving with technical rigor: identifying vulnerabilities,
+                    documenting attack paths
+                    on Medium, and helping developers understand security from an attacker's perspective.
+                </p>
+
+                <div class="about-chips">
+                    <span class="chip"><i class="fas fa-usb"></i> BadUSB Payloads</span>
+                    <span class="chip"><i class="fas fa-wifi"></i> ESP32 WiFi Pentesting</span>
+                    <span class="chip"><i class="fas fa-envelope-open-text"></i> Email Security</span>
+                    <span class="chip"><i class="fas fa-puzzle-piece"></i> Browser Extensions</span>
+                    <span class="chip"><i class="fas fa-bug"></i> OWASP Web Security</span>
+                </div>
+
+                <div class="about-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">University</span>
+                        <span class="meta-value">SLIIT (BSc Hons IT)</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Specialization</span>
+                        <span class="meta-value">Cyber Security</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Location</span>
+                        <span class="meta-value">Sri Lanka</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-visual">
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span>
+                        <span class="code-filename">operator_profile.cpp</span>
+                    </div>
+                    <pre><code><span class="cm">// Inosh Matheesha // Security Operator</span>
+<span class="kw">struct</span> <span class="type">SecurityResearcher</span> {
+  <span class="type">const char</span>* name       = <span class="str">"Inosh Matheesha"</span>;
+  <span class="type">const char</span>* campus     = <span class="str">"SLIIT University"</span>;
+  <span class="type">const char</span>* degree     = <span class="str">"BSc (Hons) Cyber Security"</span>;
+  <span class="type">const char</span>* status     = <span class="str">"Undergraduate (2023-Present)"</span>;
+  <span class="type">bool</span>        ethical    = <span class="num">true</span>;
+  <span class="type">const char</span>* focus[4]   = {
+    <span class="str">"Web Application Pentesting"</span>,
+    <span class="str">"USB HID Payload Engineering"</span>,
+    <span class="str">"Wireless Security Frameworks"</span>,
+    <span class="str">"Security Research & Writeups"</span>
+  };
+};</code></pre>
+                </div>
+
+                <div class="edu-card">
+                    <div class="edu-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="edu-details">
+                        <span class="edu-year">2023 — Present</span>
+                        <h4>BSc (Hons) in Information Technology</h4>
+                        <p>Specialising in Cyber Security — Sri Lanka Institute of Information Technology (SLIIT)</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 3D Showcase Section -->
-    <section id="bento" class="showcase-section">
-        <div class="section-header" data-scroll="fade-scale">
-            <h2 class="section-title gradient-text">About Me</h2>
-            <p class="section-subtitle">Who I am, what I do, and where I'm headed</p>
+    <!-- Section 02: Skills -->
+    <section class="section skills" id="skills">
+        <div class="section-header">
+            <span class="section-num">02</span>
+            <h2 class="section-title">Skills</h2>
+        </div>
+        <div class="skills-grid">
+            <div class="skill-card" data-category="offensive">
+                <div class="skill-icon"><i class="fas fa-shield-halved"></i></div>
+                <h3>Offensive Security</h3>
+                <ul>
+                    <li>Web Application Pentesting (OWASP Top 10)</li>
+                    <li>Arduino BadUSB Payload Engineering</li>
+                    <li>ESP32 WiFi Deauth & Evil Twin Lab Tests</li>
+                    <li>Privilege Escalation & Command Injection</li>
+                    <li>CTF Challenge Authoring & Exploitation</li>
+                </ul>
+            </div>
+
+            <div class="skill-card" data-category="tools">
+                <div class="skill-icon"><i class="fas fa-toolbox"></i></div>
+                <h3>Security Tooling</h3>
+                <ul>
+                    <li>Burp Suite / OWASP ZAP</li>
+                    <li>Nmap / Masscan Surface Recon</li>
+                    <li>Wireshark Network Traffic Analysis</li>
+                    <li>Metasploit Framework (Authorized Labs)</li>
+                    <li>Custom Wordlist & Recon Generation</li>
+                </ul>
+            </div>
+
+            <div class="skill-card" data-category="research">
+                <div class="skill-icon"><i class="fas fa-code"></i></div>
+                <h3>Development & Scripting</h3>
+                <ul>
+                    <li>Python (Automation, Exploits, WordlistGen)</li>
+                    <li>JavaScript (Browser Extensions, Web Security)</li>
+                    <li>PHP & MySQL (Web Backend Security)</li>
+                    <li>C / C++ (Arduino Payloads, Microcontrollers)</li>
+                    <li>Kotlin (Android Application Development)</li>
+                </ul>
+            </div>
+
+            <div class="skill-card" data-category="fundamentals">
+                <div class="skill-icon"><i class="fas fa-network-wired"></i></div>
+                <h3>Fundamentals & OS</h3>
+                <ul>
+                    <li>Linux / Windows Internals & Administration</li>
+                    <li>TCP/IP Networking & Packet Analysis</li>
+                    <li>Git Version Control & Documentation</li>
+                    <li>Email Security & Spoofing Defense</li>
+                    <li>Ethical Hacking Methodologies</li>
+                </ul>
+            </div>
         </div>
 
-        <div class="showcase-grid">
-            <!-- About Card - 3D Flip Card -->
-            <div class="showcase-card card-about" data-scroll="flip-up" data-scroll-delay="1">
-                <div class="sc-glow"></div>
-                <div class="sc-content">
-                    <div class="sc-header">
-                        <div class="sc-icon-wrap">
-                            <div class="sc-icon-bg"></div>
-                            <i class="fas fa-user-shield"></i>
-                        </div>
-                        <h3>Who I Am</h3>
-                    </div>
-                    <p class="sc-text">
-                        Passionate <strong>Cyber Security undergraduate</strong> at SLIIT, specializing in
-                        web development and programming. I build tools to make the digital world safer — from 
-                        BadUSB payloads to browser security extensions.
-                    </p>
-                    <div class="sc-chips">
-                        <span class="sc-chip"><i class="fas fa-usb"></i> BadUSB</span>
-                        <span class="sc-chip"><i class="fas fa-envelope-open-text"></i> Email Spoofing</span>
-                        <span class="sc-chip"><i class="fas fa-tools"></i> Security Tools</span>
-                        <span class="sc-chip"><i class="fas fa-bug"></i> Pentesting</span>
-                        <span class="sc-chip"><i class="fas fa-puzzle-piece"></i> Extensions</span>
+        <div class="skill-bars-container">
+            <h4 class="skill-bars-title">// TECHNICAL PROFICIENCY OVERVIEW</h4>
+            <div class="skill-bars-grid">
+                <div class="bar-item">
+                    <div class="bar-info"><span>JavaScript / Web Security</span><span>85%</span></div>
+                    <div class="bar-track">
+                        <div class="bar-fill" style="width: 85%;"></div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Skills Card - Hexagonal / Orbital -->
-            <div class="showcase-card card-skills" data-scroll="flip-left" data-scroll-delay="2">
-                <div class="sc-glow glow-purple"></div>
-                <div class="sc-content">
-                    <div class="sc-header">
-                        <div class="sc-icon-wrap purple">
-                            <div class="sc-icon-bg"></div>
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <h3>Tech Stack</h3>
-                    </div>
-                    <div class="skills-carousel" aria-label="Tech stack carousel">
-                        <div class="skills-slide">
-                            <div class="skills-card">
-                                <div class="skills-card-icon"><i class="fab fa-python"></i></div>
-                                <h4>Python</h4>
-                                <span class="skills-card-pct">40%</span>
-                            </div>
-                        </div>
-                        <div class="skills-slide">
-                            <div class="skills-card">
-                                <div class="skills-card-icon"><i class="fab fa-js"></i></div>
-                                <h4>JavaScript</h4>
-                                <span class="skills-card-pct">85%</span>
-                            </div>
-                        </div>
-                        <div class="skills-slide">
-                            <div class="skills-card">
-                                <div class="skills-card-icon"><i class="fab fa-php"></i></div>
-                                <h4>PHP</h4>
-                                <span class="skills-card-pct">85%</span>
-                            </div>
-                        </div>
-                        <div class="skills-slide">
-                            <div class="skills-card">
-                                <div class="skills-card-icon"><i class="fas fa-user-secret"></i></div>
-                                <h4>Pentesting</h4>
-                                <span class="skills-card-pct">80%</span>
-                            </div>
-                        </div>
-                        <div class="skills-slide">
-                            <div class="skills-card">
-                                <div class="skills-card-icon"><i class="fas fa-code"></i></div>
-                                <h4>C / C++</h4>
-                                <span class="skills-card-pct">80%</span>
-                            </div>
-                        </div>
-                        <div class="skills-slide">
-                            <div class="skills-card">
-                                <div class="skills-card-icon"><i class="fas fa-network-wired"></i></div>
-                                <h4>Networking</h4>
-                                <span class="skills-card-pct">75%</span>
-                            </div>
-                        </div>
-                        <div class="skills-slide">
-                            <div class="skills-card">
-                                <div class="skills-card-icon"><i class="fab fa-linux"></i></div>
-                                <h4>Linux</h4>
-                                <span class="skills-card-pct">80%</span>
-                            </div>
-                        </div>
-                        <div class="skills-slide">
-                            <div class="skills-card">
-                                <div class="skills-card-icon"><i class="fas fa-crosshairs"></i></div>
-                                <h4>Nmap</h4>
-                                <span class="skills-card-pct">75%</span>
-                            </div>
-                        </div>
-                        <div class="skills-slide">
-                            <div class="skills-card">
-                                <div class="skills-card-icon"><i class="fas fa-fish"></i></div>
-                                <h4>Wireshark</h4>
-                                <span class="skills-card-pct">70%</span>
-                            </div>
-                        </div>
+                <div class="bar-item">
+                    <div class="bar-info"><span>Pentesting & OWASP</span><span>80%</span></div>
+                    <div class="bar-track">
+                        <div class="bar-fill" style="width: 80%;"></div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Education Card - Holographic -->
-            <div class="showcase-card card-edu" data-scroll="flip-right" data-scroll-delay="3">
-                <div class="sc-glow glow-green"></div>
-                <div class="sc-content">
-                    <div class="sc-header">
-                        <div class="sc-icon-wrap green">
-                            <div class="sc-icon-bg"></div>
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <h3>Education</h3>
-                    </div>
-                    <div class="edu-holo-card">
-                        <div class="edu-holo-shine"></div>
-                        <div class="edu-holo-body">
-                            <div class="edu-holo-badge">
-                                <i class="fas fa-university"></i>
-                            </div>
-                            <div class="edu-holo-info">
-                                <span class="edu-holo-year"><i class="fas fa-calendar-alt"></i> 2023 – Present</span>
-                                <strong class="edu-holo-degree">BSc (Hons) in IT</strong>
-                                <span class="edu-holo-spec">Specialising in Cyber Security</span>
-                                <span class="edu-holo-school">Sri Lanka Institute of Information Technology</span>
-                            </div>
-                        </div>
+                <div class="bar-item">
+                    <div class="bar-info"><span>C / C++ / Microcontrollers</span><span>80%</span></div>
+                    <div class="bar-track">
+                        <div class="bar-fill" style="width: 80%;"></div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Projects Stat Card - Counter Orb -->
-            <div class="showcase-card card-stat" data-scroll="zoom-twist" data-scroll-delay="4">
-                <div class="sc-glow glow-blue"></div>
-                <div class="sc-content sc-content-center">
-                    <div class="stat-orb">
-                        <div class="stat-orb-ring"></div>
-                        <div class="stat-orb-ring ring-2"></div>
-                        <div class="stat-orb-core">
-                            <span class="stat-orb-number">6+</span>
-                            <span class="stat-orb-label">Projects</span>
-                        </div>
+                <div class="bar-item">
+                    <div class="bar-info"><span>Linux Administration</span><span>80%</span></div>
+                    <div class="bar-track">
+                        <div class="bar-fill" style="width: 80%;"></div>
                     </div>
-                    <p class="stat-orb-sub">Security Projects Built</p>
-                    <a href="#projects" class="stat-orb-cta">
-                        Explore <i class="fas fa-arrow-right"></i>
-                    </a>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-info"><span>Networking & Wireshark</span><span>75%</span></div>
+                    <div class="bar-track">
+                        <div class="bar-fill" style="width: 75%;"></div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-info"><span>Python Scripting</span><span>70%</span></div>
+                    <div class="bar-track">
+                        <div class="bar-fill" style="width: 70%;"></div>
+                    </div>
                 </div>
             </div>
         </div>
+        <p class="skills-note">* All offensive tools and techniques used strictly in authorized lab & CTF environments.
+        </p>
     </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="projects-section">
-        <div class="section-header" data-scroll="fade-scale">
-            <h2 class="section-title gradient-text">Featured Projects</h2>
-            <p class="section-subtitle">Real-world security research and tools</p>
+    <!-- Section 03: Projects -->
+    <section class="section projects" id="projects">
+        <div class="section-header">
+            <span class="section-num">03</span>
+            <h2 class="section-title">Projects</h2>
+            <a href="https://github.com/InoshMatheesha" class="section-link" target="_blank" rel="noopener">GitHub
+                Profile →</a>
         </div>
 
-        <div class="projects-grid carousel">
+        <!-- Compact 3-Column Grid -->
+        <div class="projects-grid compact-grid">
             <!-- Project 1 -->
-            <div class="project-card slide" data-project="1" data-scroll="flip-up" data-scroll-delay="1">
-                <div class="project-header">
-                    <div class="project-icon-wrap">
-                        <div class="project-icon">
-                            <img src="assets/promicro-payloads.jpg" alt="ProMicro Payloads">
-                        </div>
-                    </div>
+            <article class="project-card compact-card">
+                <div class="project-visual compact-visual">
+                    <img src="assets/promicro-payloads.jpg" alt="ProMicro Payloads" class="project-img" />
+                    <span class="compact-badge"><i class="fas fa-usb"></i> Hardware</span>
+                </div>
+                <div class="project-content compact-content">
                     <div class="project-tags">
-                        <span class="tag">Arduino</span>
-                        <span class="tag">BadUSB</span>
+                        <span>Arduino</span><span>C++</span><span>BadUSB</span>
+                    </div>
+                    <h3>ProMicro Payloads</h3>
+                    <p>Arduino ATmega32U4 USB HID payloads for keystroke injection & security research.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/InoshMatheesha/ProMicro-Payloads" target="_blank" rel="noopener"
+                            class="project-link">
+                            <i class="fab fa-github"></i> Repository
+                        </a>
                     </div>
                 </div>
-                <h3>ProMicro Payloads</h3>
-                <p>Collection of Arduino-based USB HID payloads for cybersecurity education and authorized penetration
-                    testing.</p>
-                <div class="project-footer">
-                    <a href="https://github.com/InoshMatheesha/ProMicro-Payloads" target="_blank" class="project-link">
-                        <i class="fab fa-github"></i> View Code
-                    </a>
-                </div>
-            </div>
+            </article>
 
             <!-- Project 2 -->
-            <div class="project-card slide" data-project="2" data-scroll="rise-tilt" data-scroll-delay="2">
-                <div class="project-header">
-                    <div class="project-icon-wrap">
-                        <div class="project-icon">
-                            <img src="assets/SecureShopCTF.png" alt="SecureShopCTF">
-                        </div>
-                    </div>
+            <article class="project-card compact-card">
+                <div class="project-visual compact-visual">
+                    <img src="assets/ZeNeOn ESP32.png" alt="ZeNeOn ESP32 WiFi Framework" class="project-img" />
+                    <span class="compact-badge"><i class="fas fa-wifi"></i> WiFi</span>
+                </div>
+                <div class="project-content compact-content">
                     <div class="project-tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">Research</span>
+                        <span>ESP32</span><span>Pentesting</span><span>C++</span>
+                    </div>
+                    <h3>ZeNeOn ESP32 Framework</h3>
+                    <p>ESP32 wireless assessment framework with deauth, Evil Twin AP, and injection features.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/InoshMatheesha/ZeNeOn-ESP32-WiFi-Framework" target="_blank"
+                            rel="noopener" class="project-link">
+                            <i class="fab fa-github"></i> Repository
+                        </a>
                     </div>
                 </div>
-                <h3>SecureShopCTF</h3>
-                <p>CTF challenge focused on web application security, including authentication, authorization, and
-                    data encryption.</p>
-                <div class="project-footer">
-                    <a href="https://github.com/InoshMatheesha/SecureShopCTF" target="_blank" class="project-link">
-                        <i class="fab fa-github"></i> View Code
-                    </a>
-                </div>
-            </div>
+            </article>
 
             <!-- Project 3 -->
-            <div class="project-card slide" data-project="3" data-scroll="flip-left" data-scroll-delay="3">
-                <div class="project-header">
-                    <div class="project-icon-wrap">
-                        <div class="project-icon">
-                            <img src="assets/freebie-games.jpg" alt="FreebieGamesFinder">
-                        </div>
-                    </div>
+            <article class="project-card compact-card">
+                <div class="project-visual compact-visual">
+                    <img src="assets/SecureShopCTF.png" alt="SecureShopCTF" class="project-img" />
+                    <span class="compact-badge"><i class="fas fa-flag"></i> CTF Lab</span>
+                </div>
+                <div class="project-content compact-content">
                     <div class="project-tags">
-                        <span class="tag">JavaScript</span>
-                        <span class="tag">Extension</span>
+                        <span>Python</span><span>OWASP</span><span>Web</span>
+                    </div>
+                    <h3>SecureShopCTF</h3>
+                    <p>Vulnerable e-commerce web app challenge focusing on authentication & command injection.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/InoshMatheesha/SecureShopCTF" target="_blank" rel="noopener"
+                            class="project-link">
+                            <i class="fab fa-github"></i> Code
+                        </a>
+                        <a href="https://medium.com/@inoshmatheesha/secureshop-ctf-room-complete-walkthrough-guide-8827bc27e57d"
+                            target="_blank" rel="noopener" class="project-link alt">
+                            <i class="fab fa-medium"></i> Guide
+                        </a>
                     </div>
                 </div>
-                <h3>FreebieGamesFinder</h3>
-                <p>Chrome extension finding 500+ free games using FreeToGame API with smart search and caching.</p>
-                <div class="project-footer">
-                    <a href="https://github.com/InoshMatheesha/FreebieGamesFinder-Extension" target="_blank"
-                        class="project-link">
-                        <i class="fab fa-github"></i> View Code
-                    </a>
-                </div>
-            </div>
+            </article>
 
             <!-- Project 4 -->
-            <div class="project-card slide" data-project="4" data-scroll="zoom-twist" data-scroll-delay="4">
-                <div class="project-header">
-                    <div class="project-icon-wrap">
-                        <div class="project-icon">
-                            <img src="assets/exam-scheduler.jpg" alt="Exam Scheduler">
-                        </div>
-                    </div>
+            <article class="project-card compact-card">
+                <div class="project-visual compact-visual">
+                    <img src="assets/freebie-games.jpg" alt="FreebieGamesFinder Extension" class="project-img" />
+                    <span class="compact-badge"><i class="fas fa-puzzle-piece"></i> Extension</span>
+                </div>
+                <div class="project-content compact-content">
                     <div class="project-tags">
-                        <span class="tag">Kotlin</span>
-                        <span class="tag">Android</span>
+                        <span>JavaScript</span><span>Chrome API</span>
+                    </div>
+                    <h3>FreebieGamesFinder</h3>
+                    <p>Chrome extension indexing 500+ free games with instant filtering & FreeToGame API caching.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/InoshMatheesha/FreebieGamesFinder-Extension" target="_blank"
+                            rel="noopener" class="project-link">
+                            <i class="fab fa-github"></i> Repository
+                        </a>
                     </div>
                 </div>
-                <h3>Exam Scheduler</h3>
-                <p>Android app to organize exams and tasks with Jetpack Compose and Room database.</p>
-                <div class="project-footer">
-                    <a href="https://github.com/InoshMatheesha/Exam-Scheduler" target="_blank" class="project-link">
-                        <i class="fab fa-github"></i> View Code
-                    </a>
-                </div>
-            </div>
+            </article>
 
             <!-- Project 5 -->
-            <div class="project-card slide" data-project="5" data-scroll="slide-rotate" data-scroll-delay="5">
-                <div class="project-header">
-                    <div class="project-icon-wrap">
-                        <div class="project-icon">
-                            <img src="assets/ZeNeOn ESP32.png" alt="ZeNeOn ESP32 WiFi Framework">
-                        </div>
-                    </div>
+            <article class="project-card compact-card">
+                <div class="project-visual compact-visual">
+                    <img src="assets/exam-scheduler.jpg" alt="Exam Scheduler" class="project-img" />
+                    <span class="compact-badge"><i class="fas fa-mobile-screen"></i> Mobile</span>
+                </div>
+                <div class="project-content compact-content">
                     <div class="project-tags">
-                        <span class="tag">ESP32</span>
-                        <span class="tag">WiFi Security</span>
+                        <span>Kotlin</span><span>Android</span><span>Room DB</span>
+                    </div>
+                    <h3>Exam Scheduler App</h3>
+                    <p>Android task organizer for university students built with Jetpack Compose & Room DB.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/InoshMatheesha/Exam-Scheduler" target="_blank" rel="noopener"
+                            class="project-link">
+                            <i class="fab fa-github"></i> Repository
+                        </a>
                     </div>
                 </div>
-                <h3>ZeNeOn-ESP32-WiFi-Framework</h3>
-                <p>ZeNeOn is an ESP32-based WiFi security assessment framework that provides deauthentication attacks, Evil Twin AP creation, beacon flooding, packet capture, and Payload Injection.</p>
-                <div class="project-footer">
-                    <a href="https://github.com/InoshMatheesha/ZeNeOn-ESP32-WiFi-Framework" target="_blank"
-                        class="project-link">
-                        <i class="fab fa-github"></i> View Code
-                    </a>
-                </div>
-            </div>
+            </article>
 
             <!-- Project 6 -->
-            <div class="project-card slide" data-project="6" data-scroll="flip-right" data-scroll-delay="6">
-                <div class="project-header">
-                    <div class="project-icon-wrap">
-                        <div class="project-icon">
-                            <img src="assets/wordlist-generator.jpg" alt="Wordlist Generator">
-                        </div>
-                    </div>
+            <article class="project-card compact-card">
+                <div class="project-visual compact-visual">
+                    <img src="assets/wordlist-generator.jpg" alt="Wordlist Generator" class="project-img" />
+                    <span class="compact-badge"><i class="fas fa-terminal"></i> Tool</span>
+                </div>
+                <div class="project-content compact-content">
                     <div class="project-tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">Tools</span>
+                        <span>Python</span><span>CLI</span><span>Security</span>
+                    </div>
+                    <h3>Wordlist Generator CLI</h3>
+                    <p>Targeted password wordlist generation tool for security testing & fuzzing audits.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/InoshMatheesha/WordlistGenarator" target="_blank" rel="noopener"
+                            class="project-link">
+                            <i class="fab fa-github"></i> Repository
+                        </a>
                     </div>
                 </div>
-                <h3>Wordlist Generator</h3>
-                <p>Custom wordlist generation tool for security testing and password auditing.</p>
-                <div class="project-footer">
-                    <a href="https://github.com/InoshMatheesha/WordlistGenarator" target="_blank" class="project-link">
-                        <i class="fab fa-github"></i> View Code
-                    </a>
-                </div>
-            </div>
+            </article>
         </div>
     </section>
 
-    <!-- Blog/Articles Section -->
-    <section id="blog" class="blog-section">
-        <div class="section-header" data-scroll="fade-scale">
-            <h2 class="section-title gradient-text">My Articles</h2>
-            <p class="section-subtitle">Insights on cybersecurity, ethical hacking, and security research</p>
+    <!-- Section 04: Articles -->
+    <section class="section articles" id="articles">
+        <div class="section-header">
+            <span class="section-num">04</span>
+            <h2 class="section-title">Articles & Writeups</h2>
+            <a href="https://medium.com/@inoshmatheesha" class="section-link" target="_blank" rel="noopener">Medium
+                Profile →</a>
         </div>
 
-        <div class="articles-grid carousel">
-            <!-- Article 1 -->
-            <div class="article-card slide" data-scroll="rise-tilt" data-scroll-delay="1">
-                <div class="article-header">
-                    <i class="fab fa-medium"></i>
-                    <span class="article-date">Medium Article</span>
+        <div class="articles-list">
+            <a href="https://medium.com/@inoshmatheesha/secureshop-ctf-room-complete-walkthrough-guide-8827bc27e57d"
+                class="article-card" target="_blank" rel="noopener">
+                <div class="article-meta">
+                    <span class="article-date"><i class="fab fa-medium"></i> Medium Writeup</span>
+                    <span class="article-read">10 min read</span>
                 </div>
-                <h3>SecureShop CTF Room - Complete Walkthrough Guide</h3>
-                <p>The SecureShop CTF lab is an educational cybersecurity challenge that mimics a vulnerable e-commerce
-                    web application. This walkthrough tutorial offers in-depth step-by-step procedures for the
-                    identification and exploitation of several security vulnerabilities related to the OWASP Top 10</p>
-                <div class="article-footer">
-                    <div class="article-tags">
-                        <span class="tag"><i class="fas fa-flag"></i> CTF</span>
-                        <span class="tag"><i class="fas fa-book-open"></i> Walkthrough</span>
-                    </div>
-                    <a href="https://medium.com/@inoshmatheesha/secureshop-ctf-room-complete-walkthrough-guide-8827bc27e57d"
-                        target="_blank" class="article-link">
-                        Read More <i class="fas fa-arrow-right"></i>
-                    </a>
+                <h3>SecureShop CTF Room — Complete Walkthrough Guide</h3>
+                <p>In-depth step-by-step walkthrough detailing vulnerability discovery, exploitation of OWASP flaws,
+                    authentication bypass, and root flag capture.</p>
+                <div class="article-tags">
+                    <span>CTF</span><span>OWASP Top 10</span><span>Walkthrough</span>
                 </div>
-            </div>
+                <span class="article-arrow">→</span>
+            </a>
 
-            <!-- Article 2 -->
-            <div class="article-card slide" data-scroll="flip-up" data-scroll-delay="2">
-                <div class="article-header">
-                    <i class="fab fa-medium"></i>
-                    <span class="article-date">Medium Article</span>
+            <a href="https://medium.com/@inoshmatheesha/os-command-injection-056c2ee7aaa6" class="article-card"
+                target="_blank" rel="noopener">
+                <div class="article-meta">
+                    <span class="article-date"><i class="fab fa-medium"></i> Medium Article</span>
+                    <span class="article-read">7 min read</span>
                 </div>
-                <h3>OS command injection</h3>
-                <p>OS command injection is also known as shell injection. It allows an attacker to execute operating
-                    system (OS) commands on the server that is running an application, and typically fully compromise
-                    the application and its data. Often, an attacker can leverage an OS command injection vulnerability
-                    to compromise other parts of the hosting infrastructure, and exploit trust relationships to pivot
-                    the attack to other systems within the organization.</p>
-                <div class="article-footer">
-                    <div class="article-tags">
-                        <span class="tag"><i class="fas fa-terminal"></i> OS Command Injection</span>
-                        <span class="tag"><i class="fas fa-book-open"></i> Walkthrough</span>
-                    </div>
-                    <a href="https://medium.com/@inoshmatheesha/os-command-injection-056c2ee7aaa6" target="_blank"
-                        class="article-link">
-                        Read More <i class="fas fa-arrow-right"></i>
-                    </a>
+                <h3>Understanding & Exploiting OS Command Injection</h3>
+                <p>Comprehensive guide to shell injection vulnerabilities, payload crafting, blind command injection
+                    detection, and server hardening techniques.</p>
+                <div class="article-tags">
+                    <span>Command Injection</span><span>RCE</span><span>Web Security</span>
                 </div>
-            </div>
+                <span class="article-arrow">→</span>
+            </a>
 
-            <!-- Article 3 -->
-            <div class="article-card slide" data-scroll="slide-rotate" data-scroll-delay="3">
-                <div class="article-header">
-                    <i class="fab fa-medium"></i>
-                    <span class="article-date">Medium Article</span>
+            <a href="https://medium.com/@inoshmatheesha/file-upload-vulnerabilities-93ca2f959938" class="article-card"
+                target="_blank" rel="noopener">
+                <div class="article-meta">
+                    <span class="article-date"><i class="fab fa-medium"></i> Medium Article</span>
+                    <span class="article-read">8 min read</span>
                 </div>
-                <h3>File upload vulnerabilities</h3>
-                <p>File upload vulnerabilities are when a web server allows users to upload files to its filesystem
-                    without sufficiently validating things like their name, type, contents, or size. Failing to properly
-                    enforce restrictions on these could mean that even a basic image upload function can be used to
-                    upload arbitrary and potentially dangerous files instead. This could even include server-side script
-                    files that enable remote code execution.</p>
-                <div class="article-footer">
-                    <div class="article-tags">
-                        <span class="tag"><i class="fas fa-file-upload"></i> File Upload</span>
-                        <span class="tag"><i class="fas fa-book-open"></i> Walkthrough</span>
-                    </div>
-                    <a href="https://medium.com/@inoshmatheesha/file-upload-vulnerabilities-93ca2f959938"
-                        target="_blank" class="article-link">
-                        Read More <i class="fas fa-arrow-right"></i>
-                    </a>
+                <h3>Deep Dive: File Upload Vulnerabilities & Bypass Tactics</h3>
+                <p>Analyzing how improper file validation enables webshell uploads and remote code execution, with
+                    practical mitigation strategies for developers.</p>
+                <div class="article-tags">
+                    <span>File Upload</span><span>Webshell</span><span>RCE</span>
                 </div>
-            </div>
+                <span class="article-arrow">→</span>
+            </a>
 
-            <!-- Article 4 -->
-            <div class="article-card slide" data-scroll="zoom-twist" data-scroll-delay="4">
-                <div class="article-header">
-                    <i class="fab fa-medium"></i>
-                    <span class="article-date">Medium Article</span>
+            <a href="https://medium.com/@inoshmatheesha/path-traversal-e8faafaca05f" class="article-card"
+                target="_blank" rel="noopener">
+                <div class="article-meta">
+                    <span class="article-date"><i class="fab fa-medium"></i> Medium Article</span>
+                    <span class="article-read">6 min read</span>
                 </div>
-                <h3>Path traversal</h3>
-                <p>Path traversal, also known as directory traversal, is a type of vulnerability that occurs when an
-                    application fails to sanitize user input, allowing an attacker to access or modify files on the
-                    server. This can lead to unauthorized access to sensitive data, such as configuration files, source
-                    code, or even system files.</p>
-                <div class="article-footer">
-                    <div class="article-tags">
-                        <span class="tag"><i class="fas fa-folder-open"></i> Path Traversal</span>
-                        <span class="tag"><i class="fas fa-book-open"></i> Walkthrough</span>
-                    </div>
-                    <a href="https://medium.com/@inoshmatheesha/path-traversal-e8faafaca05f" target="_blank"
-                        class="article-link">
-                        Read More <i class="fas fa-arrow-right"></i>
-                    </a>
+                <h3>Path Traversal Vulnerabilities: From Reading Files to Server Compromise</h3>
+                <p>Explaining directory traversal mechanisms, encoding tricks to bypass filters, and how attackers
+                    exfiltrate sensitive configuration files.</p>
+                <div class="article-tags">
+                    <span>Path Traversal</span><span>File Read</span><span>Filter Bypass</span>
                 </div>
-            </div>
+                <span class="article-arrow">→</span>
+            </a>
 
-            <!-- Article 5 -->
-            <div class="article-card slide" data-scroll="flip-left" data-scroll-delay="5">
-                <div class="article-header">
-                    <i class="fab fa-medium"></i>
-                    <span class="article-date">Medium Article</span>
+            <a href="https://medium.com/@inoshmatheesha/xml-external-entity-xxe-injection-f72848d2bd2c"
+                class="article-card" target="_blank" rel="noopener">
+                <div class="article-meta">
+                    <span class="article-date"><i class="fab fa-medium"></i> Medium Article</span>
+                    <span class="article-read">9 min read</span>
                 </div>
-                <h3>XML external entity (XXE) injection</h3>
-                <p>XXE injection is a type of attack that targets applications parsing XML input. It happens when the
-                    XML parser is configured to process external entities special references in XML that can load files
-                    or fetch resources from remote servers.</p>
-                <div class="article-footer">
-                    <div class="article-tags">
-                        <span class="tag"><i class="fas fa-file-code"></i> XXE</span>
-                        <span class="tag"><i class="fas fa-book-open"></i> Walkthrough</span>
-                    </div>
-                    <a href="https://medium.com/@inoshmatheesha/xml-external-entity-xxe-injection-f72848d2bd2c"
-                        target="_blank" class="article-link">
-                        Read More <i class="fas fa-arrow-right"></i>
-                    </a>
+                <h3>XML External Entity (XXE) Injection Masterclass</h3>
+                <p>How misconfigured XML parsers allow attackers to read local files, trigger SSRF attacks, and
+                    compromise internal infrastructure.</p>
+                <div class="article-tags">
+                    <span>XXE</span><span>XML Security</span><span>SSRF</span>
                 </div>
-            </div>
+                <span class="article-arrow">→</span>
+            </a>
 
-            <!-- Article 6 -->
-            <div class="article-card slide" data-scroll="flip-right" data-scroll-delay="6">
-                <div class="article-header">
-                    <i class="fab fa-medium"></i>
-                    <span class="article-date">Medium Article</span>
+            <a href="https://medium.com/@inoshmatheesha/cross-site-scripting-xss-portswiggers-apprentice-labs-labs-1-9-walkthrough-9ff6ae1369fe"
+                class="article-card" target="_blank" rel="noopener">
+                <div class="article-meta">
+                    <span class="article-date"><i class="fab fa-medium"></i> Medium Walkthrough</span>
+                    <span class="article-read">12 min read</span>
                 </div>
-                <h3>Cross-Site Scripting (XSS) | PortSwigger’s Apprentice Labs | Labs 1–9 Walkthrough</h3>
-                <p>Cross-site scripting (XSS) is a type of attack that targets applications that display user input
-                    without proper validation or escaping. It allows an attacker to inject malicious scripts into a web
-                    page, which can then be executed by other users.</p>
-                <div class="article-footer">
-                    <div class="article-tags">
-                        <span class="tag"><i class="fas fa-code"></i> XSS</span>
-                        <span class="tag"><i class="fas fa-book-open"></i> Walkthrough</span>
-                    </div>
-                    <a href="https://medium.com/@inoshmatheesha/cross-site-scripting-xss-portswiggers-apprentice-labs-labs-1-9-walkthrough-9ff6ae1369fe"
-                        target="_blank" class="article-link">
-                        Read More <i class="fas fa-arrow-right"></i>
-                    </a>
+                <h3>PortSwigger Apprentice Labs: XSS Labs 1–9 Detailed Walkthrough</h3>
+                <p>Step-by-step solutions and technical context for PortSwigger Web Security Academy's Reflected,
+                    Stored, and DOM-based XSS apprentice labs.</p>
+                <div class="article-tags">
+                    <span>XSS</span><span>PortSwigger</span><span>Lab Walkthrough</span>
                 </div>
-            </div>
-        </div>
-
-        <!-- View All Articles Link -->
-        <div class="view-all-articles">
-            <a href="https://medium.com/@inoshmatheesha" target="_blank" class="cta-btn glass-btn">
-                <i class="fab fa-medium"></i>
-                <span>View All Articles on Medium</span>
-                <i class="fas fa-external-link-alt"></i>
+                <span class="article-arrow">→</span>
             </a>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact-section">
-        <div class="section-header" data-scroll="fade-scale">
-            <h2 class="section-title gradient-text">Get In Touch</h2>
-            <p class="section-subtitle">Let's collaborate on something amazing</p>
+    <!-- Section 05: Contact -->
+    <section class="section contact" id="contact">
+        <div class="section-header">
+            <span class="section-num">05</span>
+            <h2 class="section-title">Contact</h2>
         </div>
 
-        <div class="contact-container">
-            <div class="contact-info" data-scroll="flip-left" data-scroll-delay="1">
-                <h3>Contact Information</h3>
-                <div class="info-items">
-                    <div class="info-item">
-                        <i class="fas fa-envelope"></i>
-                        <div>
-                            <strong> Email</strong>
-                            <a href="mailto:inoshmatheesha@gmail.com">inoshmatheesha@gmail.com</a>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <i class="fab fa-github"></i>
-                        <div>
-                            <strong> GitHub</strong>
-                            <a href="https://github.com/InoshMatheesha" target="_blank">@InoshMatheesha</a>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <div>
-                            <strong> Location</strong>
-                            <p>Sri Lanka</p>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-briefcase"></i>
-                        <div>
-                            <strong> Status</strong>
-                            <p>Open for opportunities</p>
-                        </div>
-                    </div>
-                </div>
+        <div class="contact-grid clean-contact-grid">
+            <div class="contact-text">
+                <p class="lead">
+                    Interested in cybersecurity collaboration, research discussions, or internship opportunities?
+                </p>
+                <p>
+                    Reach out directly through any of the channels below or connect on GitHub / LinkedIn.
+                </p>
 
-                <div class="social-links">
-                    <a href="https://github.com/InoshMatheesha" target="_blank" class="social-btn glass-btn">
-                        <i class="fab fa-github"></i>
+                <div class="contact-cards-grid">
+                    <a href="mailto:inoshmatheesha@gmail.com" class="contact-card-item">
+                        <div class="contact-card-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="contact-card-body">
+                            <span class="contact-card-label">EMAIL</span>
+                            <strong class="contact-card-val">inoshmatheesha@gmail.com</strong>
+                        </div>
                     </a>
-                    <a href="https://www.linkedin.com/in/inosh-matheesha-9682b429b/" target="_blank"
-                        class="social-btn glass-btn">
-                        <i class="fab fa-linkedin"></i>
+
+                    <a href="tel:0776439435" class="contact-card-item">
+                        <div class="contact-card-icon"><i class="fas fa-phone"></i></div>
+                        <div class="contact-card-body">
+                            <span class="contact-card-label">PHONE</span>
+                            <strong class="contact-card-val">+94 77 643 9435</strong>
+                        </div>
                     </a>
-                    <a href="mailto:inoshmatheesha@gmail.com" class="social-btn glass-btn">
-                        <i class="fas fa-envelope"></i>
+
+                    <a href="https://github.com/InoshMatheesha" class="contact-card-item" target="_blank"
+                        rel="noopener">
+                        <div class="contact-card-icon"><i class="fab fa-github"></i></div>
+                        <div class="contact-card-body">
+                            <span class="contact-card-label">GITHUB</span>
+                            <strong class="contact-card-val">github.com/InoshMatheesha</strong>
+                        </div>
+                    </a>
+
+                    <a href="https://www.linkedin.com/in/inosh-matheesha-9682b429b/" class="contact-card-item"
+                        target="_blank" rel="noopener">
+                        <div class="contact-card-icon"><i class="fab fa-linkedin"></i></div>
+                        <div class="contact-card-body">
+                            <span class="contact-card-label">LINKEDIN</span>
+                            <strong class="contact-card-val">linkedin.com/in/inosh-matheesha</strong>
+                        </div>
+                    </a>
+
+                    <a href="https://medium.com/@inoshmatheesha" class="contact-card-item" target="_blank"
+                        rel="noopener">
+                        <div class="contact-card-icon"><i class="fab fa-medium"></i></div>
+                        <div class="contact-card-body">
+                            <span class="contact-card-label">MEDIUM</span>
+                            <strong class="contact-card-val">medium.com/@inoshmatheesha</strong>
+                        </div>
                     </a>
                 </div>
             </div>
 
-            <form class="contact-form" id="contact-form" data-scroll="flip-right" data-scroll-delay="2">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" required class="glass-input">
+            <div class="contact-terminal">
+                <div class="terminal-window small">
+                    <div class="terminal-bar">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span class="terminal-title">reach_out.sh</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="line"><span class="prompt">$</span> ./reach_out.sh --target inosh</div>
+                        <div class="line output">[+] Establishing connection...</div>
+                        <div class="line output success">[✓] Direct Channel Open</div>
+                        <div class="line output">[i] Direct Email: inoshmatheesha@gmail.com</div>
+                        <div class="line output">[i] Location: Sri Lanka Institute of Information Technology</div>
+                        <div class="line output success">[✓] Ready for inquiries and opportunities.</div>
+                        <div class="line"><span class="prompt">$</span> <span class="cursor-blink">█</span></div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required class="glass-input">
+
+                <div class="quick-info-box">
+                    <h5><i class="fas fa-shield-alt"></i> Ethical Security Notice</h5>
+                    <p>
+                        All pentesting tools, hardware payloads, and proof-of-concept exploits developed and
+                        exclusively for research, education, and authorized security
+                        assessments.
+                    </p>
                 </div>
-                <div class="form-group">
-                    <label for="subject">Subject</label>
-                    <input type="text" id="subject" name="subject" required class="glass-input">
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" rows="5" required class="glass-input"></textarea>
-                </div>
-                <button type="submit" class="cta-btn primary-btn">
-                    <i class="fas fa-paper-plane"></i>
-                    <span>Send Message</span>
-                </button>
-                <div class="form-status" id="form-status"></div>
-            </form>
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-top">
-                <div class="footer-brand">
-                    <div class="footer-logo">
-                        <img src="nav-logo.png" alt="Logo">
-                        <span>Inosh Matheesha</span>
-                    </div>
-                    <p class="footer-description">
-                        Cyber Security Undergraduate passionate about building secure systems and exploring vulnerabilities to make the digital world safer.
-                    </p>
-                    <div class="footer-social">
-                        <a href="https://github.com/InoshMatheesha" target="_blank" class="social-icon">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="https://www.linkedin.com/in/inosh-matheesha-9682b429b/" target="_blank" class="social-icon">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="https://medium.com/@inoshmatheesha" target="_blank" class="social-icon">
-                            <i class="fab fa-medium"></i>
-                        </a>
-                        <a href="mailto:inoshmatheesha@gmail.com" class="social-icon">
-                            <i class="fas fa-envelope"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="footer-links">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#hero">Home</a></li>
-                        <li><a href="#projects">Projects</a></li>
-                        <li><a href="#blog">Articles</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-links">
-                    <h4>Projects</h4>
-                    <ul>
-                        <li><a href="https://github.com/InoshMatheesha/ProMicro-Payloads" target="_blank">ProMicro Payloads</a></li>
-                        <li><a href="https://github.com/InoshMatheesha/SecureShopCTF" target="_blank">SecureShopCTF</a></li>
-                        <li><a href="https://github.com/InoshMatheesha/FreebieGamesFinder-Extension" target="_blank">FreebieGamesFinder</a></li>
-                        <li><a href="https://github.com/InoshMatheesha/ShadowByte-SafePaste-extension" target="_blank">ShadowByte SafePaste</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-links">
-                    <h4>Contact</h4>
-                    <ul>
-                        <li><i class="fas fa-phone"></i>077 6439 435</li>
-                        <li><i class="fas fa-map-marker-alt"></i> Sri Lanka</li>
-                        <li><i class="fas fa-graduation-cap"></i> SLIIT University</li>
-                    </ul>
-                </div>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="nav-logo.png" alt="Inosh Matheesha Logo" class="footer-logo-img" />
+                <span class="footer-brand-title">Inosh Matheesha</span>
             </div>
-            
-            <div class="footer-divider"></div>
+            <p class="footer-copy">© 2026 Inosh Matheesha — Cyber Security Undergraduate @ SLIIT</p>
+            <p class="footer-note">All research conducted ethically in authorized environments.</p>
         </div>
     </footer>
-
-    <!-- Cursor Follower (hidden by script) -->
-    <div class="cursor-follower" style="display: none;"></div>
 
     <script src="script.js"></script>
 </body>

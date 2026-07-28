@@ -1,454 +1,311 @@
+// ========== CUSTOM CURSOR & FOLLOWER (DESKTOP ONLY) ==========
+const cursor = document.getElementById('cursor');
+const follower = document.getElementById('cursor-follower');
+let mouseX = 0, mouseY = 0;
+let followerX = 0, followerY = 0;
 
-// ========== VARIABLES ==========
-const typedTextElement = document.getElementById('typed-text');
-const themeToggle = document.getElementById('theme-toggle');
-const contactForm = document.getElementById('contact-form');
-const formStatus = document.getElementById('form-status');
-const cursorFollower = document.querySelector('.cursor-follower');
+const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-// Hide cursor follower (removed for professional look)
-if (cursorFollower) {
-    cursorFollower.style.display = 'none';
+if (cursor && follower && !isTouchDevice && window.innerWidth > 600) {
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+
+  function animateFollower() {
+    followerX += (mouseX - followerX) * 0.15;
+    followerY += (mouseY - followerY) * 0.15;
+    follower.style.left = followerX + 'px';
+    follower.style.top = followerY + 'px';
+    requestAnimationFrame(animateFollower);
+  }
+  animateFollower();
+
+  // Hover state for custom cursor
+  const hoverTargets = document.querySelectorAll('a, button, .btn, .skill-card, .project-card, .article-card, .contact-card-item, .social-icon-btn, input, textarea');
+  hoverTargets.forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+  });
 }
 
-// Typing animation texts
-const typingTexts = [
-    'Building secure systems...',
-    'Researching USB HID attacks...',
-    'Exploring email security...',
-    'Creating browser extensions...',
-    'Automating security tools...',
-    'Penetration testing...'
-];
+// ========== THEME TOGGLE (LIGHT & DARK MODE) ==========
+const themeToggle = document.getElementById('theme-toggle');
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    const isLight = document.body.classList.contains('light-mode');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
 
-let textIndex = 0;
-let charIndex = 0;
-let isDeleting = false;
-let typingSpeed = 100;
+  // Load saved theme preference
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-mode');
+  }
+}
 
-// ========== TYPING ANIMATION ==========
-function typeText() {
-    const currentText = typingTexts[textIndex];
+// ========== NAVIGATION SCROLL & ACTIVE LINK ==========
+const nav = document.querySelector('.nav');
+const navLinks = document.querySelectorAll('.nav-links a');
+const sections = document.querySelectorAll('section[id], header[id]');
+
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 30) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+
+  // Active section highlight
+  let currentSectionId = '';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 120;
+    const sectionHeight = section.offsetHeight;
+    if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+      currentSectionId = section.getAttribute('id');
+    }
+  });
+
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === `#${currentSectionId}`) {
+      link.classList.add('active');
+    }
+  });
+}, { passive: true });
+
+// ========== MOBILE OVERLAY MENU (ANDROID & IOS UI) ==========
+const toggle = document.getElementById('nav-toggle');
+const mobileMenu = document.getElementById('mobile-menu');
+const mobileCloseBtn = document.getElementById('mobile-close');
+
+function closeMobileMenu() {
+  if (toggle && mobileMenu) {
+    toggle.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function openMobileMenu() {
+  if (toggle && mobileMenu) {
+    toggle.classList.add('open');
+    mobileMenu.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+if (toggle && mobileMenu) {
+  toggle.addEventListener('click', () => {
+    if (mobileMenu.classList.contains('open')) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
+    }
+  });
+
+  if (mobileCloseBtn) {
+    mobileCloseBtn.addEventListener('click', closeMobileMenu);
+  }
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', closeMobileMenu);
+  });
+}
+
+// ========== TERMINAL AUTO-TYPING & INTERACTIVE CLI ==========
+const typingLine = document.getElementById('typing-line');
+if (typingLine) {
+  const phrases = [
+    'building tools to secure the digital world_',
+    'engineering BadUSB payloads for research_',
+    'developing ESP32 wireless security framework_',
+    'documenting OWASP exploit paths on Medium_',
+    'researching browser security extensions_'
+  ];
+  let phraseIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  let isPaused = false;
+
+  function type() {
+    const current = phrases[phraseIndex];
+
+    if (isPaused) {
+      setTimeout(() => {
+        isPaused = false;
+        isDeleting = true;
+        type();
+      }, 2200);
+      return;
+    }
 
     if (isDeleting) {
-        typedTextElement.textContent = currentText.substring(0, charIndex - 1);
-        charIndex--;
-        typingSpeed = 50;
-    } else {
-        typedTextElement.textContent = currentText.substring(0, charIndex + 1);
-        charIndex++;
-        typingSpeed = 100;
-    }
-
-    if (!isDeleting && charIndex === currentText.length) {
-        typingSpeed = 2000;
-        isDeleting = true;
-    } else if (isDeleting && charIndex === 0) {
+      typingLine.textContent = current.substring(0, charIndex - 1) + '_';
+      charIndex--;
+      if (charIndex === 0) {
         isDeleting = false;
-        textIndex = (textIndex + 1) % typingTexts.length;
-        typingSpeed = 500;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+      }
+      setTimeout(type, 30);
+    } else {
+      typingLine.textContent = current.substring(0, charIndex + 1);
+      charIndex++;
+      if (charIndex === current.length) {
+        isPaused = true;
+        type();
+        return;
+      }
+      setTimeout(type, 55);
     }
+  }
 
-    setTimeout(typeText, typingSpeed);
+  setTimeout(type, 1200);
 }
 
-// Start typing animation
-setTimeout(typeText, 1000);
+// Interactive CLI Command Line Input
+const cliInput = document.getElementById('cli-input');
+const terminalBody = document.getElementById('terminal');
 
-// ========== THEME TOGGLE ==========
-function toggleTheme() {
-    document.body.classList.toggle('light-mode');
-    const isLightMode = document.body.classList.contains('light-mode');
-    localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+if (cliInput && terminalBody) {
+  cliInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const command = cliInput.value.trim().toLowerCase();
+      cliInput.value = '';
+      if (!command) return;
+
+      // Append command line
+      const cmdLine = document.createElement('div');
+      cmdLine.className = 'line';
+      cmdLine.innerHTML = `<span class="prompt">inosh@sec:~$</span> ${escapeHTML(command)}`;
+      
+      // Insert before prompt input line
+      const inputLine = cliInput.closest('.prompt-input-line');
+      terminalBody.insertBefore(cmdLine, inputLine);
+
+      // Process command output
+      let outputText = '';
+      let isSuccess = false;
+
+      switch (command) {
+        case 'help':
+          outputText = `Available commands:<br/>` +
+            `[i] <span class="highlight">whoami</span> — Identity & background<br/>` +
+            `[i] <span class="highlight">skills</span> — Security & tech stack<br/>` +
+            `[i] <span class="highlight">projects</span> — Key projects list & link<br/>` +
+            `[i] <span class="highlight">articles</span> — Medium research writeups<br/>` +
+            `[i] <span class="highlight">contact</span> — Reach out & direct email<br/>` +
+            `[i] <span class="highlight">clear</span> — Reset terminal log`;
+          break;
+        case 'whoami':
+          outputText = `Inosh Matheesha — Cyber Security Undergraduate @ SLIIT University, Sri Lanka. Focus: Pentesting & Security Tool Engineering.`;
+          isSuccess = true;
+          break;
+        case 'skills':
+          outputText = `[i] <span class="highlight">Offensive</span>: Web Pentesting, BadUSB, ESP32 Deauth/Evil Twin<br/>` +
+            `[i] <span class="highlight">Tooling</span>: Burp Suite, Nmap, Wireshark, Metasploit<br/>` +
+            `[i] <span class="highlight">Dev</span>: Python, JavaScript, C/C++, Kotlin, PHP`;
+          break;
+        case 'projects':
+          outputText = `1. ProMicro Payloads (Arduino BadUSB)<br/>` +
+            `2. ZeNeOn ESP32 WiFi Framework<br/>` +
+            `3. SecureShopCTF Lab<br/>` +
+            `4. FreebieGamesFinder Extension<br/>` +
+            `5. Exam Scheduler Android App<br/>` +
+            `6. Wordlist Generator CLI`;
+          isSuccess = true;
+          break;
+        case 'articles':
+          outputText = `Medium Writeups: SecureShop CTF, OS Command Injection, File Upload Flaws, Path Traversal, XXE Injection, PortSwigger XSS Apprentice Labs.`;
+          break;
+        case 'contact':
+          outputText = `Email: inoshmatheesha@gmail.com | Phone: +94 77 643 9435 | GitHub: @InoshMatheesha`;
+          isSuccess = true;
+          break;
+        case 'clear':
+          // Remove previous output lines except initial 3 lines and input line
+          const lines = terminalBody.querySelectorAll('.line:not(.prompt-input-line)');
+          lines.forEach((line, idx) => {
+            if (idx > 2) line.remove();
+          });
+          return;
+        case 'sudo':
+          outputText = `[!] Permission denied: Ethical security operators only execute authorized commands.`;
+          break;
+        case 'matrix':
+          outputText = `<span style="color:#00e5a0;">Wake up, Neo... The Matrix has you.</span>`;
+          break;
+        default:
+          outputText = `Command not recognized: '${escapeHTML(command)}'. Type '<span class="highlight">help</span>' for available options.`;
+          break;
+      }
+
+      const outLine = document.createElement('div');
+      outLine.className = `line output ${isSuccess ? 'success' : ''}`;
+      outLine.innerHTML = outputText;
+      terminalBody.insertBefore(outLine, inputLine);
+
+      // Scroll terminal to bottom
+      terminalBody.scrollTop = terminalBody.scrollHeight;
+    }
+  });
 }
 
-// Load saved theme
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'light') {
-    document.body.classList.add('light-mode');
+function escapeHTML(str) {
+  return str.replace(/[&<>'"]/g, 
+    tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+  );
 }
 
-themeToggle.addEventListener('click', toggleTheme);
+// ========== 3D CARD TILT EFFECT (DESKTOP ONLY) ==========
+if (!isTouchDevice && window.innerWidth > 900) {
+  const tiltElements = document.querySelectorAll('.skill-card, .project-card, .article-card, .contact-card-item, .terminal-window, .code-block');
 
-// ========== SMOOTH SCROLL ==========
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
-        const target = document.querySelector(targetId);
-        if (target) {
-            const navHeight = document.querySelector('.glass-nav').offsetHeight;
-            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
-            
-            window.scrollTo({
-                top: targetPosition,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
-// ========== NAVIGATION ACTIVE STATE ==========
-const navLinks = document.querySelectorAll('.nav-link');
-const sections = document.querySelectorAll('section[id]');
-
-function updateActiveNav() {
-    const scrollY = window.scrollY;
-
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100;
-        const sectionHeight = section.offsetHeight;
-        const sectionId = section.getAttribute('id');
-
-        if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${sectionId}`) {
-                    link.classList.add('active');
-                }
-            });
-        }
-    });
-}
-
-window.addEventListener('scroll', updateActiveNav);
-
-// ========== CARD HOVER GLOW EFFECT (Subtle) ==========
-const glassCards = document.querySelectorAll('.glass-card');
-
-glassCards.forEach(card => {
+  tiltElements.forEach(card => {
     card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -5;
+      const rotateY = ((x - centerX) / centerX) * 5;
 
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-    });
-});
-
-// ========== 3D TILT ON ALL CARDS ==========
-const tiltCards = document.querySelectorAll('.showcase-card, .project-card, .article-card, .contact-info, .contact-form');
-
-tiltCards.forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        const rotateX = ((y - centerY) / centerY) * -6;   // max ±6deg
-        const rotateY = ((x - centerX) / centerX) * 6;
-
-        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
     });
 
     card.addEventListener('mouseleave', () => {
-        card.style.transform = '';
-    });
-});
-
-// ========== PROJECT ICON CURSOR-REACTIVE 3D ==========
-document.querySelectorAll('.project-icon-wrap').forEach(wrap => {
-    const icon = wrap.querySelector('.project-icon');
-
-    wrap.addEventListener('mousemove', (e) => {
-        const rect = wrap.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const cx = rect.width  / 2;
-        const cy = rect.height / 2;
-
-        // Normalise -1 → +1 relative to center
-        const nx = (x - cx) / cx;
-        const ny = (y - cy) / cy;
-
-        // Map to degrees: horizontal cursor → rotateY, vertical → rotateX
-        const ry =  nx * 28;   // max ±28deg left-right
-        const rx = -ny * 22;   // max ±22deg up-down
-
-        icon.style.setProperty('--icon-rx', `${ry}deg`);
-        icon.style.setProperty('--icon-ry', `${rx}deg`);
-
-        // Specular highlight position relative to icon
-        const iRect = icon.getBoundingClientRect();
-        const ix = ((e.clientX - iRect.left) / iRect.width)  * 100;
-        const iy = ((e.clientY - iRect.top)  / iRect.height) * 100;
-        icon.style.setProperty('--shine-x', `${ix}%`);
-        icon.style.setProperty('--shine-y', `${iy}%`);
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+      card.style.transition = 'transform 0.5s ease';
     });
 
-    wrap.addEventListener('mouseleave', () => {
-        // Spring back smoothly
-        icon.style.transition = 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease';
-        icon.style.setProperty('--icon-rx', '0deg');
-        icon.style.setProperty('--icon-ry', '0deg');
-
-        // Revert to snappy transition after spring-back
-        setTimeout(() => {
-            icon.style.transition = '';
-        }, 620);
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'none';
     });
-});
-
-// ========== 3D MIST SCROLL REVEAL ==========
-const scrollElements = document.querySelectorAll('[data-scroll]');
-let lastScrollY = window.scrollY;
-
-const scrollObserver = new IntersectionObserver((entries) => {
-    const scrollingDown = window.scrollY >= lastScrollY;
-    lastScrollY = window.scrollY;
-
-    entries.forEach(entry => {
-        const el = entry.target;
-        const anim = el.dataset.scroll;
-
-        if (entry.isIntersecting) {
-            // Remove directional class so CSS base hidden state takes over briefly,
-            // then add is-visible to crystallise
-            el.classList.remove('from-top');
-            // tiny rAF so the browser registers the class removal before re-adding visible
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => el.classList.add('is-visible'));
-            });
-        } else {
-            el.classList.remove('is-visible');
-            // When leaving viewport apply directional from-top for up-scroll re-entry
-            if (!scrollingDown) {
-                el.classList.add('from-top');
-            } else {
-                el.classList.remove('from-top');
-            }
-        }
-    });
-}, {
-    threshold: 0.10,
-    rootMargin: '0px 0px -50px 0px'
-});
-
-window.addEventListener('scroll', () => { lastScrollY = window.scrollY; }, { passive: true });
-
-scrollElements.forEach(el => scrollObserver.observe(el));
-
-// ========== SKILLS CAROUSEL CLICK ADVANCE ==========
-const skillsCarousel = document.querySelector('.skills-carousel');
-if (skillsCarousel) {
-    const slides = Array.from(skillsCarousel.querySelectorAll('.skills-slide'));
-
-    slides.forEach((slide, index) => {
-        slide.addEventListener('click', () => {
-            const nextIndex = (index + 1) % slides.length;
-            const nextSlide = slides[nextIndex];
-            nextSlide.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-        });
-    });
+  });
 }
 
-// ========== GRADIENT MESH ANIMATION (Subtle) ==========
-const gradientMesh = document.querySelector('.gradient-mesh');
-if (gradientMesh) {
-    let hue = 0;
-    setInterval(() => {
-        hue = (hue + 0.5) % 360;  // Slower hue rotation
-        gradientMesh.style.filter = `hue-rotate(${hue}deg)`;
-    }, 100);
-}
+// ========== SCROLL REVEAL ANIMATIONS ==========
+const revealElements = document.querySelectorAll('.skill-card, .project-card, .article-card, .contact-card-item, .code-block, .terminal-window, .skill-bars-container');
 
-// ========== CONTACT FORM SUBMISSION ==========
-if (contactForm) {
-    contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const formData = {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            subject: document.getElementById('subject').value,
-            message: document.getElementById('message').value
-        };
-
-        // Show loading state
-        formStatus.textContent = 'Sending...';
-        formStatus.className = 'form-status';
-        formStatus.style.display = 'block';
-
-        try {
-            // Discord Webhook (encoded)
-            const _0x = ['aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ0NDQxNTc0MzI4NTI2NDU5NC9NMk5IeTFMZVZPd2xuc3Y2SjlyVHJwOUNaZE1qbXVJQ2hsSGlG', 'WkpTMEwydUFiYlhROTY4cGlLZkZGelB1bzM3c01EZw=='];
-            const webhookUrl = atob(_0x[0] + _0x[1]);
-
-            const embed = {
-                embeds: [{
-                    title: '📬 New Portfolio Contact Message',
-                    color: 0x00f5ff,
-                    fields: [
-                        {
-                            name: '👤 Name',
-                            value: formData.name,
-                            inline: true
-                        },
-                        {
-                            name: '📧 Email',
-                            value: formData.email,
-                            inline: true
-                        },
-                        {
-                            name: '📋 Subject',
-                            value: formData.subject,
-                            inline: false
-                        },
-                        {
-                            name: '💬 Message',
-                            value: formData.message,
-                            inline: false
-                        }
-                    ],
-                    timestamp: new Date().toISOString(),
-                    footer: {
-                        text: 'Sent from Portfolio Contact Form'
-                    }
-                }]
-            };
-
-            const response = await fetch(webhookUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(embed)
-            });
-
-            if (response.ok) {
-                formStatus.textContent = '✅ Message sent successfully!';
-                formStatus.className = 'form-status success';
-                contactForm.reset();
-
-                setTimeout(() => {
-                    formStatus.style.display = 'none';
-                }, 5000);
-            } else {
-                throw new Error('Failed to send message');
-            }
-        } catch (error) {
-            formStatus.textContent = '❌ Failed to send message. Please try again.';
-            formStatus.className = 'form-status error';
-        }
-    });
-}
-
-// ========== RIPPLE EFFECT ON BUTTONS ==========
-const buttons = document.querySelectorAll('.cta-btn, .glass-btn');
-
-buttons.forEach(button => {
-    button.addEventListener('click', function (e) {
-        // Remove any existing ripples first
-        const existingRipples = this.querySelectorAll('.ripple');
-        existingRipples.forEach(r => r.remove());
-        
-        const ripple = document.createElement('span');
-        const rect = this.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height) * 2;
-        const x = e.clientX - rect.left - size / 2;
-        const y = e.clientY - rect.top - size / 2;
-
-        ripple.style.cssText = `
-            position: absolute;
-            width: ${size}px;
-            height: ${size}px;
-            left: ${x}px;
-            top: ${y}px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(0);
-            animation: ripple-animation 0.5s ease-out forwards;
-            pointer-events: none;
-            z-index: 0;
-        `;
-        ripple.className = 'ripple';
-
-        this.appendChild(ripple);
-
-        setTimeout(() => {
-            ripple.remove();
-        }, 500);
-    });
-});
-
-// Add ripple CSS
-const style = document.createElement('style');
-style.textContent = `
-    .cta-btn, .glass-btn {
-        position: relative !important;
-        overflow: hidden !important;
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+      revealObserver.unobserve(entry.target);
     }
-    
-    @keyframes ripple-animation {
-        to {
-            transform: scale(1);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
 
-// ========== SCROLL PROGRESS INDICATOR ==========
-function updateScrollProgress() {
-    const winScroll = document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = (winScroll / height) * 100;
-    // Can be used for progress bar if needed
-}
-
-window.addEventListener('scroll', updateScrollProgress);
-
-// ========== PERFORMANCE OPTIMIZATION ==========
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-window.addEventListener('scroll', debounce(() => {
-    updateActiveNav();
-    updateScrollProgress();
-}, 10));
-
-// ========== EASTER EGG (Console Message) ==========
-console.log(
-    '%c🔐 Cyber Security Portfolio',
-    'font-size: 24px; font-weight: bold; color: #00f5ff; text-shadow: 0 0 10px #00f5ff;'
-);
-console.log(
-    '%c👋 Hey there! Interested in security? Let\'s connect!',
-    'font-size: 14px; color: #ff00ff;'
-);
-console.log(
-    '%c🔗 GitHub: https://github.com/InoshMatheesha',
-    'font-size: 12px; color: #00f5ff;'
-);
-
-// ========== LOADING ANIMATION ==========
-window.addEventListener('load', () => {
-    document.body.style.opacity = '0';
-    setTimeout(() => {
-        document.body.style.transition = 'opacity 0.5s ease';
-        document.body.style.opacity = '1';
-    }, 100);
+revealElements.forEach((el, i) => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = `opacity 0.45s ease ${(i % 4) * 0.07}s, transform 0.45s ease ${(i % 4) * 0.07}s`;
+  revealObserver.observe(el);
 });
 
-// ========== MOBILE MENU TOGGLE ==========
-const mobileToggle = document.querySelector('.mobile-toggle');
-const navLinksContainer = document.querySelector('.nav-links');
-
-if (mobileToggle && navLinksContainer) {
-    mobileToggle.addEventListener('click', () => {
-        navLinksContainer.classList.toggle('active');
-    });
-}
-
-console.log('🚀 Portfolio loaded successfully!');
+console.log('Inosh Matheesha // Cyber Security Portfolio Ready');
