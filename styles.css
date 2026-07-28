@@ -1121,6 +1121,163 @@ body.light-mode .theme-toggle .fa-sun {
     filter: drop-shadow(0 0 4px var(--glow-cyan));
 }
 
+/* ---- Skills Front-to-Back Carousel ---- */
+.skills-carousel {
+    --card-width: 10rem;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 100%;
+    scroll-snap-type: x mandatory;
+    width: calc(var(--card-width) * 3);
+    padding-inline: var(--card-width);
+    margin: 1rem auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.skills-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.skills-slide {
+    width: var(--card-width);
+    aspect-ratio: 3 / 4;
+    position: sticky;
+    left: calc(var(--card-width) * -1);
+    right: calc(var(--card-width) * -1);
+
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+
+    transform-origin: center 70%;
+    will-change: transform;
+
+    view-timeline: --cards inline;
+    animation: stack-cards linear both;
+    animation-timeline: --cards;
+    animation-range: contain;
+}
+
+.skills-slide .skills-card {
+    width: 100%;
+    height: 100%;
+
+    animation: rotate-cards linear both;
+    animation-timeline: --cards;
+    animation-range: contain -50% contain 150%;
+}
+
+@keyframes stack-cards {
+    0% {
+        z-index: 10;
+    }
+    40% {
+        z-index: 1000;
+    }
+    100% {
+        z-index: 1;
+    }
+}
+
+@keyframes rotate-cards {
+    0% {
+        transform: translateX(-80%) rotate(10deg) scale(0.8);
+    }
+    25% {
+        transform: translateX(-90%) rotate(5deg) scale(0.9);
+    }
+    50% {
+        transform: translateX(0%) rotate(0deg) scale(1);
+    }
+    60% {
+        transform: translateX(-20%) rotate(-15deg) scale(0.6);
+    }
+    75% {
+        transform: translateX(90%) rotate(-5deg) scale(0.9);
+    }
+    100% {
+        transform: translateX(80%) rotate(-10deg) scale(0.8);
+    }
+}
+
+@supports not (animation-timeline: view()) {
+    .skills-slide {
+        position: relative;
+        left: auto;
+        right: auto;
+        animation: none;
+    }
+    .skills-slide .skills-card {
+        animation: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .skills-carousel {
+        --card-width: 8rem;
+        width: calc(var(--card-width) * 3);
+        padding-inline: var(--card-width);
+    }
+}
+
+
+.skills-card {
+    border-radius: 20px;
+    padding: 1.4rem 1.2rem;
+    background: linear-gradient(145deg, #101c5c, #0c1445);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    text-align: center;
+}
+
+body.light-mode .skills-card {
+    background: linear-gradient(145deg, #f0f4f8, #e2e8f0);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.skills-card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    color: var(--neon-magenta);
+    background: rgba(47, 164, 255, 0.12);
+    border: 1px solid rgba(47, 164, 255, 0.25);
+    box-shadow: 0 8px 20px rgba(47, 164, 255, 0.2);
+    font-size: 1.4rem;
+}
+
+.skills-slide:nth-child(odd) .skills-card-icon {
+    color: var(--neon-cyan);
+    background: rgba(0, 255, 221, 0.12);
+    border-color: rgba(0, 255, 221, 0.25);
+    box-shadow: 0 8px 20px rgba(0, 255, 221, 0.2);
+}
+
+.skills-card h4 {
+    font-size: 1rem;
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--text-primary);
+}
+
+.skills-card-pct {
+    font-size: 0.8rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+}
+
 /* ---- Skills Orbit Grid ---- */
 .skills-orbit {
     display: grid;
@@ -1500,8 +1657,57 @@ body.light-mode .sc-glow { opacity: 0.06; }
 }
 
 .projects-grid {
+    margin-top: 1rem;
+}
+
+/* Shared horizontal carousel layout */
+.carousel {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    grid-auto-flow: column;
+    grid-auto-columns: 200px;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 1rem;
+    overscroll-behavior-x: contain;
+}
+
+.carousel::-webkit-scrollbar {
+    height: 10px;
+}
+
+.carousel::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 999px;
+}
+
+.carousel::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+}
+
+.slide {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    scroll-snap-align: center;
+    timeline-trigger-name: --t;
+    timeline-trigger-source: view(inline);
+    animation: unclip 0.35s ease-in-out both;
+    animation-trigger: --t play-forwards play-backwards;
+}
+
+@keyframes unclip {
+    from {
+        clip-path: inset(100% 0 0 0 round 1rem);
+    }
+    to {
+        clip-path: inset(0);
+    }
+}
+
+.projects-grid.carousel {
+    grid-auto-columns: minmax(280px, 1fr);
     gap: 1.5rem;
 }
 
@@ -2463,10 +2669,12 @@ textarea.glass-input {
 
 /* Article Cards Styling */
 .articles-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
     margin: 1rem 0;
+}
+
+.articles-grid.carousel {
+    grid-auto-columns: minmax(260px, 1fr);
+    gap: 1.5rem;
 }
 
 /* ---- 3D Article Card ---- */
@@ -2485,6 +2693,11 @@ textarea.glass-input {
     display: flex;
     flex-direction: column;
     height: 100%;
+}
+
+.project-card.slide,
+.article-card.slide {
+    aspect-ratio: auto;
 }
 
 .article-card::before {
@@ -2622,9 +2835,9 @@ textarea.glass-input {
 
 /* Responsive */
 @media (max-width: 768px) {
-    .articles-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+    .projects-grid.carousel,
+    .articles-grid.carousel {
+        grid-auto-columns: minmax(220px, 1fr);
     }
 }
 

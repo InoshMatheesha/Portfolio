@@ -230,6 +230,20 @@ window.addEventListener('scroll', () => { lastScrollY = window.scrollY; }, { pas
 
 scrollElements.forEach(el => scrollObserver.observe(el));
 
+// ========== SKILLS CAROUSEL CLICK ADVANCE ==========
+const skillsCarousel = document.querySelector('.skills-carousel');
+if (skillsCarousel) {
+    const slides = Array.from(skillsCarousel.querySelectorAll('.skills-slide'));
+
+    slides.forEach((slide, index) => {
+        slide.addEventListener('click', () => {
+            const nextIndex = (index + 1) % slides.length;
+            const nextSlide = slides[nextIndex];
+            nextSlide.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        });
+    });
+}
+
 // ========== GRADIENT MESH ANIMATION (Subtle) ==========
 const gradientMesh = document.querySelector('.gradient-mesh');
 if (gradientMesh) {
