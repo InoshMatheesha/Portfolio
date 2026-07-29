@@ -313,4 +313,50 @@ revealElements.forEach((el, i) => {
   revealObserver.observe(el);
 });
 
+// ========== SKILL BARS FILL & PERCENTAGE COUNTER ANIMATION ==========
+const skillBarsContainer = document.querySelector('.skill-bars-container');
+
+if (skillBarsContainer) {
+  const barsObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const barFills = entry.target.querySelectorAll('.bar-fill');
+        const percentTexts = entry.target.querySelectorAll('.bar-percentage');
+
+        barFills.forEach((fill, index) => {
+          const targetPercent = fill.getAttribute('data-percent') || '0';
+          setTimeout(() => {
+            fill.style.width = targetPercent + '%';
+          }, index * 120);
+        });
+
+        percentTexts.forEach((textEl, index) => {
+          const target = parseInt(textEl.getAttribute('data-target') || '0', 10);
+          setTimeout(() => {
+            let start = 0;
+            const duration = 1200;
+            const stepTime = 20;
+            const steps = duration / stepTime;
+            const increment = target / steps;
+
+            const timer = setInterval(() => {
+              start += increment;
+              if (start >= target) {
+                textEl.textContent = target + '%';
+                clearInterval(timer);
+              } else {
+                textEl.textContent = Math.floor(start) + '%';
+              }
+            }, stepTime);
+          }, index * 120);
+        });
+
+        barsObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.25 });
+
+  barsObserver.observe(skillBarsContainer);
+}
+
 console.log('Inosh Matheesha // Cyber Security Portfolio Ready');
