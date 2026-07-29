@@ -40,9 +40,11 @@ if (themeToggle) {
     localStorage.setItem('theme', isLight ? 'light' : 'dark');
   });
 
-  // Load saved theme preference
+  // Load saved theme preference (default: light mode)
   const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'light') {
+  if (savedTheme === 'dark') {
+    document.body.classList.remove('light-mode');
+  } else {
     document.body.classList.add('light-mode');
   }
 }
