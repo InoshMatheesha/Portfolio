@@ -215,7 +215,7 @@ if (cliInput && terminalBody) {
             `3. SecureShopCTF Lab<br/>` +
             `4. FreebieGamesFinder Extension<br/>` +
             `5. Exam Scheduler Android App<br/>` +
-            `6. Wordlist Generator CLI`;
+            `6. MooDeX — PC Gaming Hub (WPF App)`;
           isSuccess = true;
           break;
         case 'articles':
@@ -262,7 +262,7 @@ function escapeHTML(str) {
 
 // ========== 3D CARD TILT EFFECT (DESKTOP ONLY) ==========
 if (!isTouchDevice && window.innerWidth > 900) {
-  const tiltElements = document.querySelectorAll('.skill-card, .project-card, .article-card, .contact-card-item, .terminal-window, .code-block');
+  const tiltElements = document.querySelectorAll('.skill-card, .project-card, .article-card, .contact-card-item, .terminal-window, .code-block, .intern-card');
 
   tiltElements.forEach(card => {
     card.addEventListener('mousemove', (e) => {
@@ -271,15 +271,20 @@ if (!isTouchDevice && window.innerWidth > 900) {
       const y = e.clientY - rect.top;
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      const rotateX = ((y - centerY) / centerY) * -5;
-      const rotateY = ((x - centerX) / centerX) * 5;
+      const rotateX = ((y - centerY) / centerY) * -9;
+      const rotateY = ((x - centerX) / centerX) * 9;
 
-      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+
+      const percentX = (x / rect.width) * 100;
+      const percentY = (y / rect.height) * 100;
+      card.style.setProperty('--mouse-x', `${percentX}%`);
+      card.style.setProperty('--mouse-y', `${percentY}%`);
     });
 
     card.addEventListener('mouseleave', () => {
-      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
-      card.style.transition = 'transform 0.5s ease';
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+      card.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)';
     });
 
     card.addEventListener('mouseenter', () => {
@@ -289,7 +294,7 @@ if (!isTouchDevice && window.innerWidth > 900) {
 }
 
 // ========== SCROLL REVEAL ANIMATIONS ==========
-const revealElements = document.querySelectorAll('.skill-card, .project-card, .article-card, .contact-card-item, .code-block, .terminal-window, .skill-bars-container');
+const revealElements = document.querySelectorAll('.skill-card, .project-card, .article-card, .contact-card-item, .code-block, .intern-card, .terminal-window, .skill-bars-container');
 
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {

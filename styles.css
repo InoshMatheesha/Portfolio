@@ -1072,6 +1072,267 @@ body.light-mode .social-icon-btn {
   font-weight: 500;
 }
 
+/* Creative Security Intern Profile Card with 3D Depth */
+.intern-card {
+  position: relative;
+  background: rgba(18, 22, 34, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 229, 160, 0.25);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35), 0 0 20px rgba(0, 229, 160, 0.05);
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.intern-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(0, 229, 160, 0.14),
+    transparent 45%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.intern-card:hover::before {
+  opacity: 1;
+}
+
+.intern-card:hover {
+  border-color: rgba(0, 229, 160, 0.55);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45), 0 0 35px rgba(0, 229, 160, 0.18);
+}
+
+body.light-mode .intern-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 168, 118, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.intern-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.25rem;
+  background: rgba(10, 13, 20, 0.85);
+  border-bottom: 1px solid var(--border);
+  transform: translateZ(15px);
+}
+
+body.light-mode .intern-card-header {
+  background: rgba(240, 244, 248, 0.95);
+}
+
+.intern-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent);
+  animation: pulseDot 1.8s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+.intern-id {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+}
+
+.intern-card-body {
+  padding: 1.4rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  transform-style: preserve-3d;
+}
+
+.candidate-overview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  transform: translateZ(20px);
+}
+
+body.light-mode .candidate-overview {
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+.candidate-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+  letter-spacing: -0.01em;
+}
+
+.candidate-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+}
+
+.gpa-score-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 229, 160, 0.08);
+  border: 1px solid rgba(0, 229, 160, 0.3);
+  border-radius: 10px;
+  padding: 0.4rem 0.85rem;
+  transform: translateZ(30px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.gpa-score-card:hover {
+  transform: translateZ(38px) scale(1.04);
+  border-color: var(--accent);
+}
+
+.gpa-val {
+  font-family: var(--mono);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.gpa-max {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.target-roles-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transform: translateZ(22px);
+}
+
+.target-roles-title {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+
+.role-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transform: translateZ(15px);
+  transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.role-badge:hover {
+  border-color: var(--accent);
+  background: rgba(0, 229, 160, 0.08);
+  transform: translateZ(28px) scale(1.03);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+}
+
+.role-badge i {
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+.role-badge span {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.intern-specs-row {
+  display: flex;
+  gap: 1rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+  transform: translateZ(15px);
+}
+
+.spec-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1;
+}
+
+.spec-item i {
+  color: var(--accent-cyan);
+  font-size: 1.1rem;
+}
+
+.spec-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.spec-val {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
 /* Code Block */
 .code-block {
   background: var(--bg-elevated);
@@ -1172,6 +1433,33 @@ body.light-mode .code-header {
   flex-shrink: 0;
 }
 
+.edu-details {
+  flex: 1;
+}
+
+.edu-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.gpa-badge {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  padding: 0.15rem 0.6rem;
+  background: rgba(0, 229, 160, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(0, 229, 160, 0.3);
+  border-radius: 20px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
 .edu-details h4 {
   font-size: 1rem;
   font-weight: 600;
@@ -1188,7 +1476,6 @@ body.light-mode .code-header {
   font-size: 0.72rem;
   color: var(--accent-cyan);
   display: block;
-  margin-bottom: 0.2rem;
 }
 
 /* ========== SKILLS SECTION ========== */
@@ -1327,10 +1614,27 @@ body.light-mode .code-header {
 }
 
 .compact-visual {
-  height: 130px;
+  height: 140px;
   overflow: hidden;
   position: relative;
   background: var(--bg-elevated);
+}
+
+.project-img,
+.compact-visual img {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.compact-card:hover .project-img,
+.compact-card:hover .compact-visual img {
+  transform: scale(1.06);
 }
 
 .compact-badge {
