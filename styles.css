@@ -1010,6 +1010,9 @@ body.light-mode .social-icon-btn {
   margin: 0 auto;
   position: relative;
   z-index: 1;
+  /* Skip rendering/layout for offscreen sections until they scroll near the viewport */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
 }
 
 .section-header {

@@ -54,8 +54,14 @@ const nav = document.querySelector('.nav');
 const navLinks = document.querySelectorAll('.nav-links a');
 const sections = document.querySelectorAll('section[id], header[id]');
 
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 30) {
+// Throttle scroll work with requestAnimationFrame to avoid layout thrashing
+let scrollTicking = false;
+let lastActiveId = '';
+
+function onScroll() {
+  const scrollY = window.scrollY;
+
+  if (scrollY > 30) {
     nav.classList.add('scrolled');
   } else {
     nav.classList.remove('scrolled');
@@ -66,17 +72,27 @@ window.addEventListener('scroll', () => {
   sections.forEach(section => {
     const sectionTop = section.offsetTop - 120;
     const sectionHeight = section.offsetHeight;
-    if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+    if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
       currentSectionId = section.getAttribute('id');
     }
   });
 
-  navLinks.forEach(link => {
-    link.classList.remove('active');
-    if (link.getAttribute('href') === `#${currentSectionId}`) {
-      link.classList.add('active');
-    }
-  });
+  // Only touch the DOM when the active section actually changes
+  if (currentSectionId !== lastActiveId) {
+    lastActiveId = currentSectionId;
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === `#${currentSectionId}`);
+    });
+  }
+
+  scrollTicking = false;
+}
+
+window.addEventListener('scroll', () => {
+  if (!scrollTicking) {
+    scrollTicking = true;
+    requestAnimationFrame(onScroll);
+  }
 }, { passive: true });
 
 // ========== MOBILE OVERLAY MENU (ANDROID & IOS UI) ==========
