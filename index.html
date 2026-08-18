@@ -45,6 +45,7 @@
             <li><a href="#about">about</a></li>
             <li><a href="#skills">skills</a></li>
             <li><a href="#projects">projects</a></li>
+            <li><a href="#github">github</a></li>
             <li><a href="#articles">articles</a></li>
             <li><a href="#contact">contact</a></li>
         </ul>
@@ -71,6 +72,7 @@
             <a href="#about">about</a>
             <a href="#skills">skills</a>
             <a href="#projects">projects</a>
+            <a href="#github">github</a>
             <a href="#articles">articles</a>
             <a href="#contact">contact</a>
         </div>
@@ -309,6 +311,22 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- CV Download — terminal-style file transfer -->
+                        <a href="Inosh_Matheesha.pdf" download="Inosh_Matheesha.pdf" class="cv-download"
+                            aria-label="Download CV as PDF">
+                            <span class="cv-sweep" aria-hidden="true"></span>
+                            <span class="cv-icon"><i class="fas fa-file-arrow-down"></i></span>
+                            <span class="cv-body">
+                                <span class="cv-cmd">$ wget --curriculum-vitae</span>
+                                <strong class="cv-file">Inosh_Matheesha.pdf</strong>
+                                <span class="cv-track" aria-hidden="true"><span class="cv-fill"></span></span>
+                            </span>
+                            <span class="cv-action">
+                                <span class="cv-action-label">DOWNLOAD</span>
+                                <i class="fas fa-arrow-down cv-arrow"></i>
+                            </span>
+                        </a>
                     </div>
                 </div>
 
@@ -607,10 +625,76 @@
         </div>
     </section>
 
-    <!-- Section 04: Articles -->
-    <section class="section articles" id="articles">
+    <!-- Section 04: GitHub Telemetry (Live API Stats) -->
+    <section class="section github-section" id="github">
         <div class="section-header">
             <span class="section-num">04</span>
+            <h2 class="section-title">GitHub Telemetry</h2>
+            <a href="https://github.com/InoshMatheesha" class="section-link" target="_blank" rel="noopener">@InoshMatheesha
+                →</a>
+        </div>
+
+        <div class="gh-telemetry" id="gh-telemetry" data-user="InoshMatheesha" aria-label="Live GitHub statistics">
+            <div class="gh-stats">
+                <div class="gh-stat">
+                    <div class="gh-stat-icon"><i class="fas fa-code-branch"></i></div>
+                    <span class="gh-stat-num" data-gh="repos" data-count="13">0</span>
+                    <span class="gh-stat-label">Repositories</span>
+                </div>
+                <div class="gh-stat">
+                    <div class="gh-stat-icon"><i class="fas fa-users"></i></div>
+                    <span class="gh-stat-num" data-gh="followers" data-count="55">0</span>
+                    <span class="gh-stat-label">Followers</span>
+                </div>
+                <div class="gh-stat">
+                    <div class="gh-stat-icon"><i class="fas fa-star"></i></div>
+                    <span class="gh-stat-num" data-gh="stars" data-count="6">0</span>
+                    <span class="gh-stat-label">Stars Earned</span>
+                </div>
+                <div class="gh-stat">
+                    <div class="gh-stat-icon"><i class="fas fa-user-plus"></i></div>
+                    <span class="gh-stat-num" data-gh="following" data-count="34">0</span>
+                    <span class="gh-stat-label">Following</span>
+                </div>
+            </div>
+
+            <div class="gh-grid">
+                <div class="gh-card">
+                    <div class="gh-card-head">
+                        <i class="fas fa-chart-simple" aria-hidden="true"></i> // LANGUAGE DISTRIBUTION
+                        <span class="gh-card-note">by repository</span>
+                    </div>
+                    <div class="gh-langs" data-gh="langs">
+                        <div class="gh-skel"></div>
+                        <div class="gh-skel"></div>
+                        <div class="gh-skel"></div>
+                        <div class="gh-skel"></div>
+                    </div>
+                </div>
+
+                <div class="gh-card">
+                    <div class="gh-card-head">
+                        <i class="fas fa-clock-rotate-left" aria-hidden="true"></i> // RECENT ACTIVITY
+                    </div>
+                    <ul class="gh-recent" data-gh="recent">
+                        <li class="gh-skel"></li>
+                        <li class="gh-skel"></li>
+                        <li class="gh-skel"></li>
+                        <li class="gh-skel"></li>
+                    </ul>
+                </div>
+            </div>
+
+            <p class="gh-note" data-gh="note" aria-live="polite">
+                <span class="gh-note-dot" aria-hidden="true"></span> syncing with api.github.com …
+            </p>
+        </div>
+    </section>
+
+    <!-- Section 05: Articles -->
+    <section class="section articles" id="articles">
+        <div class="section-header">
+            <span class="section-num">05</span>
             <h2 class="section-title">Articles & Writeups</h2>
             <a href="https://medium.com/@inoshmatheesha" class="section-link" target="_blank" rel="noopener">Medium
                 Profile →</a>
@@ -709,10 +793,10 @@
         </div>
     </section>
 
-    <!-- Section 05: Contact -->
+    <!-- Section 06: Contact -->
     <section class="section contact" id="contact">
         <div class="section-header">
-            <span class="section-num">05</span>
+            <span class="section-num">06</span>
             <h2 class="section-title">Contact</h2>
         </div>
 
