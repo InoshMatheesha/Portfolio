@@ -1805,6 +1805,76 @@ body.light-mode .compact-badge {
   opacity: 0.75;
 }
 
+/* ========== FEATURED PROJECT (full-width card in the compact grid) ========== */
+.featured-card {
+  grid-column: 1 / -1;
+  flex-direction: row;
+}
+
+.featured-card .featured-visual {
+  flex: 0 0 54%;
+  height: auto;
+  min-height: 280px;
+}
+
+.featured-card .featured-visual img {
+  object-position: left top;
+}
+
+.featured-card .featured-content {
+  padding: 1.6rem 1.8rem;
+  justify-content: center;
+}
+
+.featured-card .featured-content h3 {
+  font-size: 1.45rem;
+  margin-bottom: 0.6rem;
+}
+
+.featured-card .featured-content p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.featured-card .featured-content p a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  border-bottom: 1px dashed currentColor;
+}
+
+.featured-meta {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  margin-bottom: 0.7rem;
+}
+
+.featured-card .project-links {
+  margin-top: 0;
+}
+
+@media (max-width: 900px) {
+  .featured-card {
+    flex-direction: column;
+  }
+
+  .featured-card .featured-visual {
+    flex: none;
+    height: 220px;
+    min-height: 0;
+  }
+
+  .featured-card .featured-content {
+    padding: 1.2rem;
+  }
+
+  .featured-card .featured-content h3 {
+    font-size: 1.2rem;
+  }
+}
+
 /* ========== ARTICLES SECTION ========== */
 .articles-list {
   display: flex;
