@@ -799,17 +799,29 @@ body.light-mode .hero-title {
   color: var(--text-muted);
   margin-bottom: 1.5rem;
   line-height: 1.65;
-  background: rgba(209, 209, 209, 0.45);
-  padding: 0.8rem 1.1rem;
-  border-radius: 10px;
-  border: 1px solid rgba(110, 30, 30, 0.06);
   max-width: 480px;
+  padding: 0.85rem 1.15rem;
+  border-radius: 10px;
+  /* Same dark glass as the stat pills below it, so it sits on the photo instead of washing it out */
+  background: rgba(21, 24, 36, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
+}
+
+.hero-tagline strong {
+  color: var(--text);
+  font-weight: 600;
 }
 
 body.light-mode .hero-tagline {
-  border-color: rgba(140, 182, 169, 0.25);
-  color: #000000;
-  box-shadow: 0 8px 24px rgba(241, 240, 240, 0.06);
+  background: rgba(255, 255, 255, 0.88);
+  border-color: var(--border);
+  border-left-color: var(--accent);
+  color: var(--text-muted);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
 }
 
 .hero-stats-bar {
@@ -1872,6 +1884,284 @@ body.light-mode .compact-badge {
 
   .featured-card .featured-content h3 {
     font-size: 1.2rem;
+  }
+}
+
+/* ========== "TRY MELODIX" CREATIVE CTA ========== */
+.try-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  align-self: flex-start;
+  margin: 0.2rem 0 1.1rem;
+  padding: 0.6rem 1.1rem 0.6rem 0.95rem;
+  border-radius: 999px;
+  text-decoration: none;
+  color: #04110c;
+  background: linear-gradient(110deg, var(--accent) 0%, var(--accent-cyan) 48%, var(--accent-purple) 100%);
+  background-size: 220% 100%;
+  animation: tryFlow 7s linear infinite;
+  box-shadow: 0 10px 26px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease;
+}
+
+@keyframes tryFlow {
+  to {
+    background-position: -220% 0;
+  }
+}
+
+/* Light sweep that runs across the pill on hover */
+.try-btn::after {
+  content: '';
+  position: absolute;
+  top: -40%;
+  bottom: -40%;
+  left: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  transform: translateX(-180%) skewX(-18deg);
+  pointer-events: none;
+}
+
+.try-btn:hover,
+.try-btn:focus-visible {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 16px 34px var(--accent-glow), 0 0 0 3px var(--accent-cyan-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.try-btn:hover::after,
+.try-btn:focus-visible::after {
+  animation: tryShine 0.95s ease;
+}
+
+@keyframes tryShine {
+  to {
+    transform: translateX(380%) skewX(-18deg);
+  }
+}
+
+.try-btn:active {
+  transform: translateY(0) scale(0.99);
+}
+
+/* Equalizer bars — they dance while the button sits there */
+.try-eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 16px;
+}
+
+.try-eq i {
+  width: 3px;
+  height: 35%;
+  border-radius: 2px;
+  background: #04110c;
+  animation: tryEq 1s ease-in-out infinite;
+}
+
+.try-eq i:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+.try-eq i:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+.try-eq i:nth-child(4) {
+  animation-delay: 0.1s;
+}
+
+@keyframes tryEq {
+
+  0%,
+  100% {
+    height: 28%;
+  }
+
+  50% {
+    height: 100%;
+  }
+}
+
+.try-btn-copy {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.try-btn-main {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.try-btn-sub {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  opacity: 0.72;
+}
+
+.try-btn-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(4, 17, 12, 0.14);
+  font-size: 0.7rem;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), background 0.28s ease;
+}
+
+.try-btn:hover .try-btn-arrow,
+.try-btn:focus-visible .try-btn-arrow {
+  transform: translateX(3px);
+  background: rgba(4, 17, 12, 0.24);
+}
+
+/* ========== INFINITE PROJECT CHAIN (auto right-to-left + drag) ========== */
+.projects-chain {
+  position: relative;
+  margin-top: 1.6rem;
+}
+
+.chain-viewport {
+  overflow: hidden;
+  padding: 0.6rem 0 0.9rem;
+  cursor: grab;
+  touch-action: pan-y;
+  /* Cards fade out at both edges so the chain reads as endless */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+
+.chain-viewport:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
+.chain-viewport.is-dragging {
+  cursor: grabbing;
+}
+
+.chain-viewport.is-dragging .marquee-card {
+  /* No hover lift mid-drag — it makes the row feel loose */
+  transform: none !important;
+}
+
+.chain-track {
+  display: flex;
+  align-items: stretch;
+  gap: 1.25rem;
+  width: max-content;
+  will-change: transform;
+}
+
+.marquee-card {
+  flex: 0 0 320px;
+  width: 320px;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.marquee-card .compact-visual {
+  height: 150px;
+}
+
+.marquee-card img {
+  pointer-events: none;
+}
+
+.chain-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.4rem;
+}
+
+.chain-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chain-btn {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+}
+
+.chain-btn:hover,
+.chain-btn:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+
+.chain-btn:active {
+  transform: translateY(0);
+}
+
+.chain-hint {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+@media (max-width: 600px) {
+  .marquee-card {
+    flex-basis: 268px;
+    width: 268px;
+  }
+
+  .chain-viewport {
+    /* A narrow screen cannot spare 6% of its width to a fade */
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 97%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 97%, transparent 100%);
+  }
+
+  .chain-bar {
+    justify-content: center;
+  }
+
+  .chain-hint {
+    font-size: 0.62rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .try-btn,
+  .try-eq i {
+    animation: none;
+  }
+
+  .try-btn::after {
+    display: none;
   }
 }
 

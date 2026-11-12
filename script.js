@@ -23,11 +23,16 @@ if (cursor && follower && !isTouchDevice && window.innerWidth > 600) {
   }
   animateFollower();
 
-  // Hover state for custom cursor
-  const hoverTargets = document.querySelectorAll('a, button, .btn, .skill-card, .project-card, .article-card, .contact-card-item, .social-icon-btn, input, textarea');
-  hoverTargets.forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+  // Hover state for custom cursor — delegated, so cloned carousel cards count too
+  const HOVER_SELECTOR = 'a, button, .btn, .skill-card, .project-card, .article-card, .contact-card-item, .social-icon-btn, input, textarea';
+  document.addEventListener('mouseover', (e) => {
+    if (e.target.closest && e.target.closest(HOVER_SELECTOR)) document.body.classList.add('hovering');
+  });
+  document.addEventListener('mouseout', (e) => {
+    if (!(e.target.closest && e.target.closest(HOVER_SELECTOR))) return;
+    const to = e.relatedTarget;
+    if (to && to.closest && to.closest(HOVER_SELECTOR)) return;
+    document.body.classList.remove('hovering');
   });
 }
 
@@ -228,12 +233,14 @@ if (cliInput && terminalBody) {
             `[i] <span class="highlight">Dev</span>: Python, JavaScript, C/C++, Kotlin, PHP`;
           break;
         case 'projects':
-          outputText = `1. ProMicro Payloads (Arduino BadUSB)<br/>` +
-            `2. ZeNeOn ESP32 WiFi Framework<br/>` +
-            `3. SecureShopCTF Lab<br/>` +
-            `4. FreebieGamesFinder Extension<br/>` +
-            `5. Exam Scheduler Android App<br/>` +
-            `6. MooDeX — PC Gaming Hub (WPF App)`;
+          outputText = `1. Melodix — Desktop & Web Music Player<br/>` +
+            `2. ThreatOrbit — Bulk IOC Enrichment & Triage<br/>` +
+            `3. ProMicro Payloads (Arduino BadUSB)<br/>` +
+            `4. ZeNeOn ESP32 WiFi Framework<br/>` +
+            `5. SecureShopCTF Lab<br/>` +
+            `6. FreebieGamesFinder Extension<br/>` +
+            `7. Exam Scheduler Android App<br/>` +
+            `8. MooDeX — PC Gaming Hub (WPF App)`;
           isSuccess = true;
           break;
         case 'articles':
@@ -280,7 +287,7 @@ function escapeHTML(str) {
 
 // ========== 3D CARD TILT EFFECT (DESKTOP ONLY) ==========
 if (!isTouchDevice && window.innerWidth > 900) {
-  const tiltElements = document.querySelectorAll('.skill-card, .project-card, .article-card, .contact-card-item, .terminal-window, .code-block, .intern-card');
+  const tiltElements = document.querySelectorAll('.skill-card, .project-card:not(.marquee-card), .article-card, .contact-card-item, .terminal-window, .code-block, .intern-card');
 
   tiltElements.forEach(card => {
     card.addEventListener('mousemove', (e) => {
@@ -314,7 +321,7 @@ if (!isTouchDevice && window.innerWidth > 900) {
 }
 
 // ========== SCROLL REVEAL ANIMATIONS ==========
-const revealElements = document.querySelectorAll('.skill-card, .project-card, .article-card, .contact-card-item, .code-block, .intern-card, .terminal-window, .skill-bars-container');
+const revealElements = document.querySelectorAll('.skill-card, .project-card:not(.marquee-card), .article-card, .contact-card-item, .code-block, .intern-card, .terminal-window, .skill-bars-container');
 
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
@@ -635,6 +642,264 @@ if (skillBarsContainer) {
       ? 'offline · showing cached snapshot'
       : 'rate limited by GitHub · showing last known snapshot');
   });
+})();
+
+// ========== PROJECTS: INFINITE CHAIN (auto right-to-left, drag / swipe / keys) ==========
+(function () {
+  const chain = document.getElementById('projects-chain');
+  const viewport = document.getElementById('chain-viewport');
+  const track = document.getElementById('chain-track');
+  if (!chain || !viewport || !track) return;
+
+  const REDUCE = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const BASE_SPEED = 0.042;      // px per millisecond (~42px/s) for the idle drift
+  const MAX_FLICK = 2.6;         // cap on throw velocity, px per millisecond
+  const FRICTION = 0.94;         // inertia decay, applied per 16ms
+
+  const originals = Array.from(track.children);
+  if (!originals.length) return;
+
+  let gap = 20;
+  let loopWidth = 0;             // width of one full set of cards, including its trailing gap
+  let step = 340;                // how far one arrow press travels
+  let offset = 0;                // current track translation, kept inside (-loopWidth, 0]
+
+  let autoOn = !REDUCE;          // the idle drift; the toggle button owns this
+  let hoverPaused = false;
+  let focusPaused = false;
+  let visible = false;
+  let dragging = false;
+  let inertia = 0;
+  let tween = null;
+  let rafId = null;
+  let lastFrame = 0;
+
+  // ---------- layout ----------
+  function measure() {
+    const styles = getComputedStyle(track);
+    const parsed = parseFloat(styles.columnGap || styles.gap);
+    if (!Number.isNaN(parsed)) gap = parsed;
+
+    loopWidth = originals.reduce((sum, card) => sum + card.offsetWidth + gap, 0);
+    step = originals[0].offsetWidth + gap;
+  }
+
+  function build() {
+    track.querySelectorAll('[data-clone]').forEach((node) => node.remove());
+    measure();
+    if (!loopWidth) return;
+
+    // Clone whole sets until the track can cover one loop plus a full viewport,
+    // so wrapping back to the start never exposes an empty stretch.
+    const needed = loopWidth + viewport.clientWidth;
+    let total = loopWidth;
+    while (total < needed) {
+      originals.forEach((card) => {
+        const clone = card.cloneNode(true);
+        clone.dataset.clone = '1';
+        clone.setAttribute('aria-hidden', 'true');
+        clone.querySelectorAll('a, button').forEach((el) => { el.tabIndex = -1; });
+        track.appendChild(clone);
+      });
+      total += loopWidth;
+    }
+    wrap();
+    apply();
+  }
+
+  function wrap() {
+    if (!loopWidth) return;
+    while (offset <= -loopWidth) offset += loopWidth;
+    while (offset > 0) offset -= loopWidth;
+  }
+
+  function apply() {
+    track.style.transform = 'translate3d(' + offset.toFixed(2) + 'px, 0, 0)';
+  }
+
+  // ---------- animation ----------
+  function frame(now) {
+    const dt = Math.min(now - lastFrame || 16, 48);   // a long tab-switch must not jump the chain
+    lastFrame = now;
+
+    if (tween) {
+      const progress = Math.min((now - tween.start) / tween.duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      offset = tween.from + (tween.to - tween.from) * eased;
+      if (progress >= 1) tween = null;
+    } else if (dragging) {
+      // pointermove owns the offset while a finger or the mouse is down
+    } else if (Math.abs(inertia) > BASE_SPEED) {
+      offset += inertia * dt;
+      inertia *= Math.pow(FRICTION, dt / 16);
+    } else if (autoOn && !hoverPaused && !focusPaused) {
+      offset -= BASE_SPEED * dt;
+    }
+
+    wrap();
+    apply();
+    rafId = requestAnimationFrame(frame);
+  }
+
+  function start() {
+    if (rafId !== null) return;
+    lastFrame = performance.now();
+    rafId = requestAnimationFrame(frame);
+  }
+
+  function stop() {
+    if (rafId === null) return;
+    cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+
+  function glide(distance) {
+    inertia = 0;
+    tween = { from: offset, to: offset + distance, start: performance.now(), duration: 520 };
+    start();
+  }
+
+  // ---------- drag / swipe ----------
+  let pointerId = null;
+  let lastX = 0;
+  let lastMoveTime = 0;
+  let travelled = 0;
+  let swallowClick = false;
+
+  viewport.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    dragging = true;
+    pointerId = e.pointerId;
+    lastX = e.clientX;
+    lastMoveTime = performance.now();
+    travelled = 0;
+    inertia = 0;
+    tween = null;
+    viewport.classList.add('is-dragging');
+    try { viewport.setPointerCapture(e.pointerId); } catch (err) { /* capture is a nicety */ }
+    start();
+  });
+
+  viewport.addEventListener('pointermove', (e) => {
+    if (!dragging || e.pointerId !== pointerId) return;
+    const now = performance.now();
+    const dx = e.clientX - lastX;
+    const dt = now - lastMoveTime;
+
+    offset += dx;
+    travelled += Math.abs(dx);
+    if (dt > 0) {
+      const v = dx / dt;
+      inertia = Math.max(-MAX_FLICK, Math.min(MAX_FLICK, v));
+    }
+    lastX = e.clientX;
+    lastMoveTime = now;
+    wrap();
+    apply();
+  });
+
+  function endDrag(e) {
+    if (!dragging || (e && e.pointerId !== pointerId)) return;
+    dragging = false;
+    pointerId = null;
+    viewport.classList.remove('is-dragging');
+    // A stale velocity from a pause mid-drag should not fling the chain
+    if (performance.now() - lastMoveTime > 120) inertia = 0;
+    // Treat a real drag as a drag, not as a click on whatever card ended up under the cursor
+    if (travelled > 8) swallowClick = true;
+  }
+
+  viewport.addEventListener('pointerup', endDrag);
+  viewport.addEventListener('pointercancel', endDrag);
+  viewport.addEventListener('lostpointercapture', endDrag);
+  viewport.addEventListener('dragstart', (e) => e.preventDefault());
+
+  viewport.addEventListener('click', (e) => {
+    if (!swallowClick) return;
+    swallowClick = false;
+    e.preventDefault();
+    e.stopPropagation();
+  }, true);
+
+  // ---------- controls ----------
+  const toggleBtn = chain.querySelector('[data-chain="toggle"]');
+
+  function paintToggle() {
+    if (!toggleBtn) return;
+    const icon = toggleBtn.querySelector('i');
+    if (icon) icon.className = autoOn ? 'fas fa-pause' : 'fas fa-play';
+    toggleBtn.setAttribute('aria-pressed', autoOn ? 'false' : 'true');
+    toggleBtn.setAttribute('aria-label', autoOn ? 'Pause the project carousel' : 'Play the project carousel');
+  }
+
+  chain.querySelectorAll('[data-chain]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const action = btn.dataset.chain;
+      if (action === 'next') glide(-step);
+      else if (action === 'prev') glide(step);
+      else if (action === 'toggle') {
+        autoOn = !autoOn;
+        paintToggle();
+        start();
+      }
+    });
+  });
+  paintToggle();
+
+  viewport.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); glide(-step); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); glide(step); }
+  });
+
+  // ---------- pause conditions ----------
+  viewport.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') hoverPaused = true; });
+  viewport.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') hoverPaused = false; });
+  chain.addEventListener('focusin', () => { focusPaused = true; });
+  chain.addEventListener('focusout', () => { focusPaused = false; });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else if (visible) start();
+  });
+
+  // Only animate while the section is actually on screen
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      visible = entry.isIntersecting;
+      if (visible && !document.hidden) start();
+      else stop();
+    });
+  }, { rootMargin: '120px 0px' });
+  sectionObserver.observe(chain);
+
+  // ---------- rebuild on resize ----------
+  let resizeTimer = null;
+  const rebuild = () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      const ratio = loopWidth ? offset / loopWidth : 0;
+      build();
+      offset = ratio * loopWidth;
+      wrap();
+      apply();
+    }, 150);
+  };
+
+  if (window.ResizeObserver) {
+    let firstWidth = viewport.clientWidth;
+    new ResizeObserver(() => {
+      // content-visibility means the section can measure as 0 until it scrolls near
+      if (!loopWidth && viewport.clientWidth > 0) { build(); return; }
+      if (Math.abs(viewport.clientWidth - firstWidth) < 2) return;
+      firstWidth = viewport.clientWidth;
+      rebuild();
+    }).observe(viewport);
+  } else {
+    window.addEventListener('resize', rebuild);
+  }
+
+  build();
+  window.addEventListener('load', () => { if (!loopWidth) build(); });
 })();
 
 console.log('Inosh Matheesha // Cyber Security Portfolio Ready');
