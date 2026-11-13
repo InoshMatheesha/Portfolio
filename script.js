@@ -768,6 +768,10 @@ if (skillBarsContainer) {
 
   viewport.addEventListener('pointerdown', (e) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
+    if (e.target.closest('a, button, input, textarea, select')) {
+      swallowClick = false;
+      return;
+    }
     dragging = true;
     pointerId = e.pointerId;
     lastX = e.clientX;
@@ -800,13 +804,21 @@ if (skillBarsContainer) {
 
   function endDrag(e) {
     if (!dragging || (e && e.pointerId !== pointerId)) return;
+    try {
+      if (pointerId !== null && viewport.hasPointerCapture && viewport.hasPointerCapture(pointerId)) {
+        viewport.releasePointerCapture(pointerId);
+      }
+    } catch (err) {}
     dragging = false;
     pointerId = null;
     viewport.classList.remove('is-dragging');
     // A stale velocity from a pause mid-drag should not fling the chain
     if (performance.now() - lastMoveTime > 120) inertia = 0;
     // Treat a real drag as a drag, not as a click on whatever card ended up under the cursor
-    if (travelled > 8) swallowClick = true;
+    if (travelled > 8) {
+      swallowClick = true;
+      setTimeout(() => { swallowClick = false; }, 100);
+    }
   }
 
   viewport.addEventListener('pointerup', endDrag);
@@ -815,10 +827,12 @@ if (skillBarsContainer) {
   viewport.addEventListener('dragstart', (e) => e.preventDefault());
 
   viewport.addEventListener('click', (e) => {
-    if (!swallowClick) return;
-    swallowClick = false;
-    e.preventDefault();
-    e.stopPropagation();
+    if (swallowClick) {
+      swallowClick = false;
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
   }, true);
 
   // ---------- controls ----------

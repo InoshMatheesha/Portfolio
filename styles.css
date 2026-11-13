@@ -1807,6 +1807,9 @@ body.light-mode .compact-badge {
   align-items: center;
   gap: 0.35rem;
   transition: opacity 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
 }
 
 .project-link.alt {
