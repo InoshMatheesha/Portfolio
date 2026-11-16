@@ -240,7 +240,8 @@ if (cliInput && terminalBody) {
             `5. SecureShopCTF Lab<br/>` +
             `6. FreebieGamesFinder Extension<br/>` +
             `7. Exam Scheduler Android App<br/>` +
-            `8. MooDeX — PC Gaming Hub (WPF App)`;
+            `8. MooDeX — PC Gaming Hub (WPF App)<br/>` +
+            `9. MyNoX Download Manager (Rust, Windows)`;
           isSuccess = true;
           break;
         case 'articles':
