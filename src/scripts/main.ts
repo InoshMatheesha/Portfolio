@@ -3,11 +3,12 @@ import { initStack } from './stack';
 import { initTilt } from './tilt';
 import { initButtons } from './buttons';
 import { initPalette } from './palette';
-import { initFilter } from './filter';
+import { initBelt } from './belt';
 import { initMeters } from './meters';
 import { initClock } from './clock';
 import { initCopy } from './copy';
 import { initNavSpy } from './navspy';
+import { initGithub } from './github';
 
 const env = {
   finePointer: matchMedia('(hover: hover) and (pointer: fine)').matches,
@@ -17,11 +18,12 @@ const env = {
 export type Env = typeof env;
 
 initStack(env);
+initBelt(env);
 initTilt(env);
 initButtons(env);
 initPalette();
-initFilter(env);
 initMeters(env);
 initClock();
 initCopy();
 initNavSpy();
+initGithub(env);

@@ -1,0 +1,401 @@
+---
+// GithubPulse.astro - GitHub panel: counts, recent pushes, languages and a 30-day activity strip.
+import Icon from './Icon.astro';
+import { buildSnapshot } from '../lib/github';
+import { projects } from '../data/projects';
+import { contact, github, githubUser } from '../data/site';
+
+// Baked in at build time; the browser refreshes it afterwards.
+const snapshot = await buildSnapshot(githubUser, import.meta.env.GITHUB_TOKEN);
+
+const fallback = Object.fromEntries(github.map((stat) => [stat.label, stat.value]));
+const counts = [
+  { key: 'repos', label: 'Public repos', value: snapshot?.repos ?? fallback['Repositories'] ?? 0 },
+  { key: 'stars', label: 'Stars earned', value: snapshot?.stars ?? fallback['Stars earned'] ?? 0 },
+  { key: 'followers', label: 'Followers', value: snapshot?.followers ?? fallback['Followers'] ?? 0 },
+  { key: 'following', label: 'Following', value: snapshot?.following ?? fallback['Following'] ?? 0 },
+];
+
+// Repository URL to chain card id, so a repo can point at its card.
+const chain: Record<string, string> = {};
+for (const project of projects) {
+  for (const link of project.links) {
+    if (link.href.includes('github.com/')) chain[link.href.toLowerCase().replace(/\/$/, '')] = project.id;
+  }
+}
+
+const json = JSON.stringify(snapshot).replace(/</g, '\\u003c');
+---
+
+<section class="gh reveal" data-github={githubUser} data-chain={JSON.stringify(chain)} aria-labelledby="gh-title">
+  <header class="gh__head">
+    <h3 id="gh-title">GitHub, tracked live</h3>
+    <p class="gh__status mono">
+      <span class="gh__dot" data-gh-dot aria-hidden="true"></span>
+      <span data-gh-status>{snapshot ? 'Snapshot from the last build' : 'Numbers from the last update'}</span>
+    </p>
+    <a class="link" href={contact.github.href} target="_blank" rel="noopener noreferrer">
+      Open profile
+      <span class="sr-only">(opens in a new tab)</span>
+      <Icon name="external" />
+    </a>
+  </header>
+
+  <div class="gh__grid">
+    <dl class="gh__counts">
+      {
+        counts.map((count) => (
+          <div>
+            <dd data-gh-count={count.key}>{count.value}</dd>
+            <dt class="mono">{count.label}</dt>
+          </div>
+        ))
+      }
+    </dl>
+
+    <div class="gh__recent">
+      <p class="mono gh__label">Recently pushed</p>
+      <ol data-gh-recent></ol>
+      <p class="gh__empty" data-gh-empty>Recent repositories load here when the page can reach GitHub.</p>
+    </div>
+
+    <div class="gh__side">
+      <p class="mono gh__label">Languages by repository</p>
+      <div data-gh-langs></div>
+      <p class="mono gh__label gh__label--gap">
+        Public activity, last 30 days <span data-gh-events></span>
+      </p>
+      <div data-gh-days></div>
+    </div>
+  </div>
+
+  <script type="application/json" is:inline data-gh-snapshot set:html={json} />
+</section>
+
+<style is:global>
+  /* Global on purpose: most of this panel is built in the browser. */
+  .gh {
+    margin-top: 1rem;
+    border: 1px solid var(--rivet);
+    border-radius: 1.25rem;
+    background: linear-gradient(180deg, var(--hull-2), var(--hull));
+    overflow: hidden;
+  }
+
+  .gh__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 1.5rem;
+    padding: 1.1rem 1.4rem;
+    border-bottom: 1px solid var(--rivet);
+  }
+
+  .gh__head h3 {
+    font-size: 1.2rem;
+    font-weight: 720;
+    font-stretch: 114%;
+    letter-spacing: -0.012em;
+  }
+
+  .gh__status {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-right: auto;
+    color: var(--fog);
+  }
+
+  .gh__dot {
+    position: relative;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--fog);
+  }
+
+  /* The dot turns blue and pings only when the data is live. */
+  .gh__dot.is-live {
+    background: var(--signal);
+  }
+
+  .gh__dot.is-live::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--signal);
+    animation: gh-ping 2.4s var(--ease-out) 3;
+  }
+
+  .gh__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.25fr) minmax(0, 1fr);
+  }
+
+  .gh__grid > * {
+    padding: 1.3rem 1.4rem 1.5rem;
+    border-right: 1px solid var(--rivet);
+  }
+
+  .gh__grid > :last-child {
+    border-right: 0;
+  }
+
+  .gh__label {
+    margin-bottom: 0.8rem;
+    color: var(--fog);
+  }
+
+  .gh__label--gap {
+    margin-top: 1.5rem;
+  }
+
+  .gh__label span {
+    color: var(--bone);
+  }
+
+  /* --- Counts ------------------------------------------------------- */
+  .gh__counts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.4rem 1rem;
+    align-content: start;
+  }
+
+  .gh__counts div {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .gh__counts dd {
+    font-size: 2.1rem;
+    font-weight: 780;
+    font-stretch: 120%;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh__counts dt {
+    color: var(--fog);
+    font-size: 0.6rem;
+  }
+
+  /* --- Recent repositories ------------------------------------------ */
+  .gh__empty {
+    color: var(--fog);
+    font-size: 0.92rem;
+  }
+
+  .gh-repo {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.15rem 1rem;
+    padding-block: 0.7rem;
+    border-bottom: 1px dashed var(--rivet);
+  }
+
+  .gh-repo:first-child {
+    padding-top: 0;
+  }
+
+  .gh-repo:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .gh-repo__name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem 0.6rem;
+    min-width: 0;
+  }
+
+  .gh-repo__name a:first-child {
+    overflow: hidden;
+    font-weight: 660;
+    font-stretch: 106%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+
+  .gh-repo__name a:first-child:hover {
+    color: var(--signal);
+  }
+
+  .gh-repo__new,
+  .gh-repo__card {
+    padding: 0.12rem 0.4rem;
+    border-radius: 0.3rem;
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+    font-size: 0.5625rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .gh-repo__new {
+    background: var(--ember);
+    color: var(--abyss);
+    font-weight: 600;
+  }
+
+  .gh-repo__card {
+    border: 1px solid var(--rivet-2);
+    color: var(--fog);
+    transition:
+      color 0.2s,
+      border-color 0.2s;
+  }
+
+  .gh-repo__card:hover {
+    border-color: var(--bone);
+    color: var(--bone);
+  }
+
+  .gh-repo__when {
+    color: var(--fog);
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+    font-size: 0.6875rem;
+    white-space: nowrap;
+    align-self: center;
+  }
+
+  .gh-repo__desc {
+    grid-column: 1 / -1;
+    overflow: hidden;
+    color: var(--fog);
+    font-size: 0.86rem;
+    line-height: 1.4;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .gh-repo__meta {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 1rem;
+    color: var(--fog);
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+    font-size: 0.6875rem;
+  }
+
+  /* --- Languages ----------------------------------------------------- */
+  .gh-langbar {
+    width: 100%;
+    height: 0.6rem;
+    border-radius: 0.3rem;
+    overflow: hidden;
+  }
+
+  .gh-lang--0 { fill: var(--l1); background: var(--l1); }
+  .gh-lang--1 { fill: var(--l2); background: var(--l2); }
+  .gh-lang--2 { fill: var(--l3); background: var(--l3); }
+  .gh-lang--3 { fill: var(--l4); background: var(--l4); }
+  .gh-lang--4 { fill: var(--l5); background: var(--l5); }
+  .gh-lang--5 { fill: var(--rivet-2); background: var(--rivet-2); }
+
+  .gh-langlist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    margin-top: 0.8rem;
+    font-size: 0.86rem;
+  }
+
+  .gh-langlist li {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .gh-langlist i {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 2px;
+  }
+
+  .gh-langlist span {
+    color: var(--fog);
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+    font-size: 0.6875rem;
+  }
+
+  /* --- 30-day activity strip ----------------------------------------- */
+  .gh-days {
+    width: 100%;
+    height: 3.25rem;
+  }
+
+  .gh-days rect {
+    fill: var(--signal);
+    transform-box: fill-box;
+    transform-origin: bottom;
+    animation: gh-grow 0.7s var(--ease-out) backwards;
+  }
+
+  .gh-days rect.is-quiet {
+    fill: var(--rivet);
+  }
+
+  .gh-days rect:hover {
+    fill: var(--bone);
+  }
+
+  .gh-axis {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.4rem;
+    color: var(--fog);
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+    font-size: 0.5625rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  @keyframes gh-ping {
+    from {
+      opacity: 0.7;
+      scale: 1;
+    }
+    to {
+      opacity: 0;
+      scale: 3.4;
+    }
+  }
+
+  @keyframes gh-grow {
+    from {
+      scale: 1 0;
+    }
+  }
+
+  @media (max-width: 62rem) {
+    .gh__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .gh__grid > * {
+      border-right: 0;
+      border-bottom: 1px solid var(--rivet);
+    }
+
+    .gh__grid > :last-child {
+      border-bottom: 0;
+    }
+
+    .gh__counts {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .gh__counts dd {
+      font-size: 1.6rem;
+    }
+  }
+</style>

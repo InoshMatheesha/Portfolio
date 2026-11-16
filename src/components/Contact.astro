@@ -1,7 +1,7 @@
 ---
 // Contact.astro - Closing call to action and every contact channel.
 import Icon from './Icon.astro';
-import { contact, person } from '../data/site';
+import { contact, cvFileName, cvUrl, person } from '../data/site';
 
 const channels = [
   { label: 'Phone', value: contact.phone, href: contact.phoneHref, external: false },
@@ -29,6 +29,10 @@ const channels = [
           <span class="copy__icon"><Icon name="copy" /><Icon name="check" /></span>
           <span data-copy-label>Copy email address</span>
         </button>
+        <a class="btn btn--ghost" href={cvUrl} download={cvFileName} data-magnet>
+          <Icon name="download" />
+          Download CV
+        </a>
       </div>
 
       <p class="contact__email reveal">{contact.email}</p>

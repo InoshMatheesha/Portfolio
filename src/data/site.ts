@@ -20,6 +20,10 @@ export const person = {
   status: 'Available for internships',
 } as const;
 
+// CV file served from assets, with the name it downloads as.
+export { default as cvUrl } from '../../assets/Inosh_Matheesha.pdf?url';
+export const cvFileName = 'Inosh_Matheesha_CV.pdf';
+
 export const targetRoles = ['SOC Analyst', 'Penetration Tester', 'GRC Analyst', 'Security Analyst'] as const;
 
 export const expertise = [
@@ -50,7 +54,9 @@ export const contact = {
     'Interested in cybersecurity collaboration, research discussions, or internship opportunities? Reach out directly through any of the channels below.',
 } as const;
 
-// GitHub numbers as listed in the content file.
+export const githubUser = 'InoshMatheesha';
+
+// Fallback GitHub numbers, used only when the API cannot be reached.
 export const github = [
   { label: 'Repositories', value: 13 },
   { label: 'Followers', value: 55 },

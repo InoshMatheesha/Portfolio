@@ -3,7 +3,7 @@
 import Icon from './Icon.astro';
 import { projects } from '../data/projects';
 import { articles } from '../data/writing';
-import { contact, nav } from '../data/site';
+import { contact, cvUrl, nav } from '../data/site';
 
 const groups = [
   {
@@ -34,6 +34,7 @@ const groups = [
       { label: 'GitHub', hint: contact.github.label, href: contact.github.href, external: true },
       { label: 'LinkedIn', hint: contact.linkedin.label, href: contact.linkedin.href, external: true },
       { label: 'Medium', hint: contact.medium.label, href: contact.medium.href, external: true },
+      { label: 'Download CV', hint: 'PDF', href: cvUrl, external: true },
       { label: 'Send an email', hint: contact.email, href: `mailto:${contact.email}`, external: false },
     ],
   },

@@ -34,6 +34,10 @@ Any static host works; the output is `dist/`.
 - **Vercel:** import the repo. `vercel.json` adds the security headers and the site URL is picked up automatically.
 - **Elsewhere:** set `SITE_URL=https://your-domain` at build time so canonical and social-card URLs are absolute.
 
+## GitHub panel
+
+The Work section reads public data from the GitHub API: once at build time for a baked-in snapshot, then again in the visitor's browser (cached for 30 minutes). No key is needed. Set `GITHUB_TOKEN` at build time only if builds start hitting the anonymous rate limit. The username is `githubUser` in `src/data/site.ts`.
+
 ## Security posture
 
 - Content Security Policy with script hashes, emitted by Astro into every page.

@@ -3,7 +3,7 @@
 import Icon from './Icon.astro';
 import StackArt from './StackArt.astro';
 import { layers } from '../data/layers';
-import { person } from '../data/site';
+import { cvFileName, cvUrl, person } from '../data/site';
 
 // Plates render bottom-up so later siblings sit higher in the stack.
 const plates = [...layers].sort((a, b) => a.n - b.n);
@@ -65,6 +65,10 @@ const plates = [...layers].sort((a, b) => a.n - b.n);
       <a class="btn" href="#work" data-magnet>
         See the work
         <span class="btn__icon"><Icon name="arrow" /><Icon name="arrow" /></span>
+      </a>
+      <a class="btn btn--ghost" href={cvUrl} download={cvFileName} data-magnet>
+        <Icon name="download" />
+        Download CV
       </a>
       <a class="btn btn--ghost" href="#contact" data-magnet>Get in touch</a>
       <p class="status mono">
