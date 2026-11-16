@@ -1,0 +1,31 @@
+---
+// index.astro - The single page, assembled section by section.
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Profile from '../components/Profile.astro';
+import Work from '../components/Work.astro';
+import Skills from '../components/Skills.astro';
+import Writing from '../components/Writing.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import CommandPalette from '../components/CommandPalette.astro';
+import { person } from '../data/site';
+
+const title = `${person.name} - ${person.role} and Cyber Security Undergraduate`;
+const description = `${person.name} is a cyber security undergraduate at SLIIT and a ${person.role.toLowerCase()} at ${person.employer}, building BadUSB payloads, ESP32 WiFi frameworks, CTF labs and SOC triage tools.`;
+---
+
+<Base title={title} description={description}>
+  <Nav />
+  <main id="main">
+    <Hero />
+    <Profile />
+    <Work />
+    <Skills />
+    <Writing />
+    <Contact />
+  </main>
+  <Footer />
+  <CommandPalette />
+</Base>

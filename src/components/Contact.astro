@@ -1,0 +1,224 @@
+---
+// Contact.astro - Closing call to action and every contact channel.
+import Icon from './Icon.astro';
+import { contact, person } from '../data/site';
+
+const channels = [
+  { label: 'Phone', value: contact.phone, href: contact.phoneHref, external: false },
+  { label: 'GitHub', value: contact.github.label, href: contact.github.href, external: true },
+  { label: 'LinkedIn', value: contact.linkedin.label, href: contact.linkedin.href, external: true },
+  { label: 'Medium', value: contact.medium.label, href: contact.medium.href, external: true },
+];
+---
+
+<section class="section contact" id="contact" aria-labelledby="contact-title">
+  <div class="wrap contact__grid">
+    <div class="contact__pitch">
+      <header class="sec-head reveal">
+        <p class="eyebrow">Contact</p>
+        <h2 id="contact-title">Hiring for a SOC, a pentest team or GRC? Let's talk.</h2>
+        <p class="lede">{contact.blurb}</p>
+      </header>
+
+      <div class="contact__actions reveal">
+        <a class="btn" href={`mailto:${contact.email}`} data-magnet>
+          <Icon name="mail" />
+          Email {person.firstName}
+        </a>
+        <button class="btn btn--ghost" type="button" data-copy={contact.email} data-magnet>
+          <span class="copy__icon"><Icon name="copy" /><Icon name="check" /></span>
+          <span data-copy-label>Copy email address</span>
+        </button>
+      </div>
+
+      <p class="contact__email reveal">{contact.email}</p>
+    </div>
+
+    <div class="panel reveal">
+      <p class="panel__status mono">
+        <span class="panel__dot" aria-hidden="true"></span>
+        {person.availability}
+      </p>
+      <ul class="channels">
+        {
+          channels.map((channel) => (
+            <li>
+              <a
+                class="channel"
+                href={channel.href}
+                target={channel.external ? '_blank' : undefined}
+                rel={channel.external ? 'noopener noreferrer' : undefined}
+              >
+                <span class="channel__label mono">{channel.label}</span>
+                <span class="channel__value">{channel.value}</span>
+                {channel.external && <span class="sr-only">(opens in a new tab)</span>}
+                <span class="channel__go" aria-hidden="true">
+                  <Icon name={channel.external ? 'external' : 'arrow'} />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="panel__time mono">
+        {person.location} time <time data-clock={person.timeZone}>UTC+5:30</time>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: end;
+  }
+
+  .contact .sec-head {
+    margin-bottom: 2.25rem;
+  }
+
+  .contact .sec-head h2 {
+    font-size: clamp(2.1rem, 5vw, 4rem);
+  }
+
+  .contact__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  /* Copy and check icons trade places once the address is copied. */
+  .copy__icon {
+    display: grid;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .copy__icon :global(svg) {
+    grid-area: 1 / 1;
+    transition:
+      opacity 0.25s,
+      scale 0.35s var(--ease-spring);
+  }
+
+  .copy__icon :global(svg + svg) {
+    opacity: 0;
+    scale: 0.4;
+  }
+
+  :global([data-copy].is-copied) .copy__icon :global(svg:first-child) {
+    opacity: 0;
+    scale: 0.4;
+  }
+
+  :global([data-copy].is-copied) .copy__icon :global(svg + svg) {
+    opacity: 1;
+    scale: 1;
+  }
+
+  .contact__email {
+    margin-top: 1.75rem;
+    color: var(--fog);
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+    font-size: 0.85rem;
+    user-select: all;
+  }
+
+  /* --- Channel panel ---------------------------------------------- */
+  .panel {
+    border: 1px solid var(--rivet);
+    border-radius: 1.25rem;
+    background: linear-gradient(180deg, var(--hull-2), var(--hull));
+    overflow: hidden;
+  }
+
+  .panel__status,
+  .panel__time {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1rem 1.25rem;
+    color: var(--fog);
+  }
+
+  .panel__status {
+    color: var(--bone);
+    border-bottom: 1px solid var(--rivet);
+  }
+
+  .panel__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--signal);
+    box-shadow: 0 0 0.6rem var(--signal);
+  }
+
+  .panel__time time {
+    margin-left: auto;
+    color: var(--bone);
+  }
+
+  .channel {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr) 1rem;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.05rem 1.25rem;
+    border-bottom: 1px solid var(--rivet);
+    transition:
+      background 0.3s,
+      padding-left 0.4s var(--ease-out);
+  }
+
+  .channel__label {
+    color: var(--fog);
+  }
+
+  .channel__value {
+    overflow: hidden;
+    font-weight: 600;
+    font-size: 0.98rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .channel__go {
+    color: var(--fog);
+    transition:
+      color 0.3s,
+      translate 0.35s var(--ease-out);
+  }
+
+  .channel:hover,
+  .channel:focus-visible {
+    padding-left: 1.6rem;
+    background: color-mix(in oklab, var(--bone) 5%, transparent);
+  }
+
+  .channel:hover .channel__go,
+  .channel:focus-visible .channel__go {
+    color: var(--bone);
+    translate: 3px 0;
+  }
+
+  @media (max-width: 60rem) {
+    .contact__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 30rem) {
+    .contact__actions .btn {
+      flex: 1 1 100%;
+    }
+
+    .channel {
+      grid-template-columns: 4.5rem minmax(0, 1fr) 1rem;
+      padding-inline: 1rem;
+    }
+  }
+</style>

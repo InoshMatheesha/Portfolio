@@ -1,0 +1,219 @@
+---
+// Writing.astro - Medium articles as an index of expanding rows.
+import Icon from './Icon.astro';
+import { articles } from '../data/writing';
+import { contact } from '../data/site';
+---
+
+<section class="section" id="writing" aria-labelledby="writing-title">
+  <div class="wrap">
+    <header class="sec-head reveal">
+      <p class="eyebrow">Writing</p>
+      <h2 id="writing-title">Attack paths, written down.</h2>
+      <p class="lede">
+        Six pieces on Medium. Each one covers how a flaw works, how it is exploited in a lab, and
+        what a developer should do about it.
+      </p>
+    </header>
+
+    <ul class="index">
+      {
+        articles.map((article) => (
+          <li class="reveal">
+            <a class="entry" href={article.href} target="_blank" rel="noopener noreferrer">
+              <span class="entry__meta mono">
+                {article.kind} / {article.minutes} min read
+              </span>
+              <span class="entry__main">
+                <span class="entry__title">{article.title}</span>
+                <span class="entry__more">
+                  <span class="entry__summary">{article.summary}</span>
+                </span>
+              </span>
+              <span class="entry__tags">
+                {article.tags.map((tag) => (
+                  <span class="chip">{tag}</span>
+                ))}
+              </span>
+              <span class="entry__go" aria-hidden="true">
+                <Icon name="external" />
+              </span>
+              <span class="sr-only">(opens on Medium in a new tab)</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="more reveal">
+      <a class="link" href={contact.medium.href} target="_blank" rel="noopener noreferrer">
+        All writing on Medium
+        <span class="sr-only">(opens in a new tab)</span>
+        <Icon name="external" />
+      </a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .index {
+    border-top: 1px solid var(--rivet);
+  }
+
+  .entry {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: 11.5rem minmax(0, 1fr) auto 2.75rem;
+    align-items: start;
+    gap: 1rem 2rem;
+    padding: 1.5rem 1rem 1.5rem 0;
+    border-bottom: 1px solid var(--rivet);
+    transition: padding-left 0.5s var(--ease-out);
+  }
+
+  /* A diverging wash sweeps in behind the hovered row. */
+  .entry::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--ember) 11%, transparent),
+      transparent 45%,
+      color-mix(in oklab, var(--signal) 11%, transparent)
+    );
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .entry__meta {
+    padding-top: 0.5rem;
+    color: var(--fog);
+  }
+
+  .entry__title {
+    display: block;
+    font-size: clamp(1.15rem, 2vw, 1.55rem);
+    font-weight: 680;
+    font-stretch: 110%;
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+    text-wrap: balance;
+  }
+
+  /* Summary opens by animating the grid track from zero. */
+  .entry__more {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.5s var(--ease-out);
+  }
+
+  .entry__summary {
+    overflow: hidden;
+    max-width: 44rem;
+    color: var(--fog);
+    font-size: 0.98rem;
+    line-height: 1.55;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .entry__summary::before {
+    content: '';
+    display: block;
+    height: 0.6rem;
+  }
+
+  .entry__tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    max-width: 19rem;
+    padding-top: 0.3rem;
+  }
+
+  .entry__go {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--rivet-2);
+    border-radius: 0.7rem;
+    color: var(--fog);
+    transition:
+      background 0.3s,
+      color 0.3s,
+      border-color 0.3s;
+  }
+
+  .entry__go :global(svg) {
+    transition: rotate 0.5s var(--ease-out);
+  }
+
+  .entry:hover,
+  .entry:focus-visible {
+    padding-left: 1rem;
+  }
+
+  .entry:hover::before,
+  .entry:focus-visible::before {
+    opacity: 1;
+  }
+
+  .entry:hover .entry__more,
+  .entry:focus-visible .entry__more {
+    grid-template-rows: 1fr;
+  }
+
+  .entry:hover .entry__summary,
+  .entry:focus-visible .entry__summary {
+    opacity: 1;
+  }
+
+  .entry:hover .entry__go,
+  .entry:focus-visible .entry__go {
+    border-color: var(--bone);
+    background: var(--bone);
+    color: var(--abyss);
+  }
+
+  .entry:hover .entry__go :global(svg),
+  .entry:focus-visible .entry__go :global(svg) {
+    rotate: 45deg;
+  }
+
+  .more {
+    margin-top: 2rem;
+  }
+
+  /* Touch screens have no hover, so summaries stay open. */
+  @media (hover: none) {
+    .entry__more {
+      grid-template-rows: 1fr;
+    }
+
+    .entry__summary {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 62rem) {
+    .entry {
+      grid-template-columns: minmax(0, 1fr) 2.75rem;
+      grid-template-areas:
+        'meta go'
+        'main main'
+        'tags tags';
+      gap: 0.75rem 1rem;
+      padding-right: 0;
+    }
+
+    .entry__meta { grid-area: meta; align-self: center; padding-top: 0; }
+    .entry__main { grid-area: main; }
+    .entry__tags { grid-area: tags; justify-content: flex-start; max-width: none; padding-top: 0; }
+    .entry__go { grid-area: go; }
+  }
+</style>

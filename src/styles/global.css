@@ -1,0 +1,434 @@
+/* global.css - Design tokens, base elements and shared primitives. */
+
+/* --- Tokens ---------------------------------------------------- */
+:root {
+  color-scheme: dark;
+
+  /* Surfaces: deep slate with a blue cast. */
+  --abyss: #0a1018;
+  --hull: #111924;
+  --hull-2: #172130;
+  --rivet: #232f40;
+  --rivet-2: #364760;
+
+  /* Ink. */
+  --bone: #ece6da;
+  --fog: #94a1b3;
+
+  /* Diverging poles: ember is offense, signal is defense. */
+  --ember: #ff6542;
+  --signal: #4f8eff;
+
+  /* Five-step scale across the stack layers. */
+  --l1: var(--ember);
+  --l2: color-mix(in oklab, var(--ember) 55%, var(--bone));
+  --l3: var(--bone);
+  --l4: color-mix(in oklab, var(--signal) 55%, var(--bone));
+  --l5: var(--signal);
+
+  --font-sans: 'Archivo Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'Martian Mono Variable', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --wrap: 78rem;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --nav-h: 4.25rem;
+  --radius: 1rem;
+}
+
+/* Category colour hooks. */
+.c-offensive { --c: var(--ember); }
+.c-defensive { --c: var(--signal); }
+.c-software { --c: var(--bone); }
+
+/* --- Reset ----------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h) + 1rem);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--abyss);
+  color: var(--bone);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  font-stretch: 100%;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+/* Fixed atmosphere: ember low-left, signal high-right. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(62vmax 48vmax at 4% 108%, color-mix(in oklab, var(--ember) 13%, transparent), transparent 70%),
+    radial-gradient(58vmax 46vmax at 102% -12%, color-mix(in oklab, var(--signal) 17%, transparent), transparent 70%);
+}
+
+/* Film grain keeps large dark areas from banding. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: url('/noise.png') 0 0 / 100px 100px;
+  opacity: 0.05;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--bone);
+  color: var(--abyss);
+}
+
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* --- Layout ---------------------------------------------------- */
+.wrap {
+  width: min(100% - var(--gutter) * 2, var(--wrap));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: clamp(4.5rem, 10vw, 8.5rem);
+}
+
+.sec-head {
+  display: grid;
+  gap: 1rem;
+  max-width: 46rem;
+  margin-bottom: clamp(2.25rem, 5vw, 4rem);
+}
+
+.sec-head h2 {
+  font-size: clamp(2rem, 4.6vw, 3.6rem);
+  font-weight: 760;
+  font-stretch: 118%;
+  line-height: 1;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+
+.lede {
+  color: var(--fog);
+  font-size: 1.125rem;
+  max-width: 38rem;
+  text-wrap: pretty;
+}
+
+/* --- Type primitives ------------------------------------------- */
+.eyebrow,
+.mono {
+  font-family: var(--font-mono);
+  font-stretch: 87.5%;
+  font-size: 0.6875rem;
+  font-weight: 450;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.5;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--fog);
+}
+
+/* The eyebrow mark is the diverging scale in miniature. */
+.eyebrow::before {
+  content: '';
+  width: 1.75rem;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--ember), var(--bone) 50%, var(--signal));
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--rivet);
+  border-radius: 0.4rem;
+  font-family: var(--font-mono);
+  font-stretch: 87.5%;
+  font-size: 0.6875rem;
+  line-height: 1.3;
+  color: var(--fog);
+  white-space: nowrap;
+}
+
+.skip {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--bone);
+  color: var(--abyss);
+  font-weight: 650;
+  translate: 0 -200%;
+}
+
+.skip:focus-visible {
+  translate: 0 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* --- Buttons: a keycap with real travel ------------------------- */
+.btn {
+  --face: var(--bone);
+  --ink: var(--abyss);
+  --base: #9a9486;
+  --tx: 0px;
+  --ty: 0px;
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  padding: 0.9rem 1.3rem;
+  border-radius: 0.8rem;
+  background: var(--face);
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 680;
+  font-stretch: 108%;
+  line-height: 1;
+  white-space: nowrap;
+  isolation: isolate;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  translate: var(--tx) var(--ty);
+  box-shadow:
+    0 5px 0 var(--base),
+    0 16px 26px -12px rgb(0 0 0 / 0.7);
+  transition:
+    transform 0.22s var(--ease-out),
+    box-shadow 0.22s var(--ease-out),
+    translate 0.5s var(--ease-out);
+}
+
+/* Sheen that follows the pointer across the face. */
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(7rem circle at var(--mx) var(--my), #fff, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 7px 0 var(--base),
+    0 24px 34px -14px rgb(0 0 0 / 0.75);
+}
+
+.btn:hover::before {
+  opacity: 0.9;
+}
+
+.btn:active {
+  transform: translateY(4px);
+  box-shadow:
+    0 1px 0 var(--base),
+    0 4px 10px -6px rgb(0 0 0 / 0.7);
+  transition-duration: 0.06s;
+}
+
+.btn--ghost {
+  --face: var(--hull-2);
+  --ink: var(--bone);
+  --base: #05090f;
+  border: 1px solid var(--rivet-2);
+}
+
+.btn--ghost::before {
+  background: radial-gradient(
+    8rem circle at var(--mx) var(--my),
+    color-mix(in oklab, var(--signal) 38%, transparent),
+    transparent 70%
+  );
+}
+
+.btn--sm {
+  padding: 0.65rem 0.9rem;
+  font-size: 0.85rem;
+  border-radius: 0.65rem;
+}
+
+/* Arrow that leaves right and re-enters from the left. */
+.btn__icon {
+  position: relative;
+  display: grid;
+  width: 1rem;
+  height: 1rem;
+  overflow: hidden;
+}
+
+.btn__icon svg {
+  grid-area: 1 / 1;
+  width: 1rem;
+  height: 1rem;
+  transition: translate 0.4s var(--ease-out);
+}
+
+.btn__icon svg + svg {
+  translate: -130% 0;
+}
+
+.btn:hover .btn__icon svg:first-child {
+  translate: 130% 0;
+}
+
+.btn:hover .btn__icon svg + svg {
+  translate: 0 0;
+}
+
+/* --- Inline text links ----------------------------------------- */
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding-block: 0.15rem;
+  color: var(--bone);
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+  transition: background-size 0.35s var(--ease-out), color 0.2s;
+}
+
+.link svg {
+  width: 0.8rem;
+  height: 0.8rem;
+  transition: translate 0.3s var(--ease-out);
+}
+
+.link:hover {
+  background-size: 0 1px;
+  background-position: 100% 100%;
+  color: var(--c, var(--bone));
+}
+
+.link:hover svg {
+  translate: 2px -2px;
+}
+
+/* --- Scroll reveal, driven by the compositor -------------------- */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    translate: 0 2rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+  }
+}

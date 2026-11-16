@@ -1,0 +1,192 @@
+---
+// StackArt.astro - Line art for one plate of the hero stack, on a 320 unit grid.
+interface Props {
+  n: 1 | 2 | 3 | 4 | 5;
+}
+
+const { n } = Astro.props;
+
+// L1: twelve header pads per side of the Pro Micro.
+const pads = Array.from({ length: 12 }, (_, k) => 124 + k * 14);
+
+// L5: indicator rows and an event histogram with one spike.
+const rows = [120, 88, 132, 70, 104].map((len, r) => ({ len, y: 62 + r * 24, hot: r === 2 }));
+const bars = [10, 14, 8, 18, 12, 22, 16, 46, 20, 12, 16, 10, 14, 8, 12, 10].map((h, k) => ({
+  h,
+  x: 102 + k * 12,
+  hot: k === 7,
+}));
+---
+
+<svg class="art" viewBox="0 0 320 320" aria-hidden="true">
+  {
+    n === 1 && (
+      <g>
+        <rect x="92" y="92" width="200" height="112" rx="7" />
+        <rect class="fill" x="76" y="130" width="30" height="36" rx="3" />
+        <path d="M84 140v16M91 140v16" />
+        {pads.map((x) => <circle cx={x} cy="104" r="3.4" />)}
+        {pads.map((x) => <circle cx={x} cy="192" r="3.4" />)}
+        <rect class="fill" x="189" y="131" width="34" height="34" rx="2" transform="rotate(45 206 148)" />
+        <circle class="solid" cx="206" cy="148" r="2.6" />
+        <rect x="138" y="141" width="24" height="13" rx="2" />
+        <path class="dim" d="M206 124v-17M218 136l12-12h16l4-14M206 172v17M194 160l-12 12h-12l-4 17M230 148h20l14 14v24M162 148h20" />
+        <path class="flow" d="M76 148H38" />
+        <path d="M38 148H18" />
+        <path class="dim" d="M38 275V148" />
+      </g>
+    )
+  }
+  {
+    n === 2 && (
+      <g>
+        <circle class="solid" cx="204" cy="150" r="4.5" />
+        <circle cx="204" cy="150" r="26" />
+        <circle class="dim" cx="204" cy="150" r="50" />
+        <circle class="dimmer" cx="204" cy="150" r="74" />
+        <circle class="dimmest" cx="204" cy="150" r="98" />
+        <circle class="solid" cx="128" cy="92" r="3.6" />
+        <circle class="dash" cx="128" cy="92" r="17" />
+        <rect class="fill" x="143" y="200" width="14" height="14" rx="3" />
+        <path class="flow" d="M149 200L131 109" />
+        <path d="M26 96h22v12H26v12h22v12H26v12h22v12H26v12h22" />
+        <path class="dim" d="M48 168v22H38v85" />
+      </g>
+    )
+  }
+  {
+    n === 3 && (
+      <g>
+        <path class="dim" d="M118 84l78-24 72 44M118 84l38 72M196 60l-40 96M268 104l-32 72" />
+        <path class="flow" d="M156 156l80 20" />
+        <path class="dim" d="M156 156l-48 66" />
+        <rect class="fill" x="112" y="78" width="12" height="12" rx="2" />
+        <rect class="fill" x="190" y="54" width="12" height="12" rx="2" />
+        <rect class="fill" x="262" y="98" width="12" height="12" rx="2" />
+        <rect class="fill" x="230" y="170" width="12" height="12" rx="2" />
+        <rect class="fill" x="102" y="216" width="12" height="12" rx="2" />
+        <circle class="fill" cx="156" cy="156" r="10" />
+        <circle class="solid" cx="156" cy="156" r="3" />
+        <circle class="dash" cx="156" cy="156" r="19" />
+        <path d="M22 112h14M22 136h14M22 160h14" />
+        <circle class="solid" cx="46" cy="112" r="2.4" />
+        <circle cx="46" cy="136" r="2.4" />
+        <circle class="solid" cx="46" cy="160" r="2.4" />
+        <path class="dim" d="M38 275v-39l14-14h50" />
+      </g>
+    )
+  }
+  {
+    n === 4 && (
+      <g>
+        <rect x="92" y="44" width="204" height="176" rx="8" />
+        <path d="M92 68h204" />
+        <circle class="solid" cx="106" cy="56" r="2.4" />
+        <circle class="solid" cx="116" cy="56" r="2.4" />
+        <circle class="solid" cx="126" cy="56" r="2.4" />
+        <rect class="dim" x="140" y="50" width="144" height="12" rx="6" />
+        <path class="dim" d="M110 86h40" />
+        <rect x="110" y="94" width="122" height="20" rx="3" />
+        <path d="M118 99v10" />
+        <path class="flow" d="M126 104h56" />
+        <rect class="dim" x="110" y="124" width="122" height="20" rx="3" />
+        <circle class="solid" cx="120" cy="134" r="1.8" />
+        <circle class="solid" cx="129" cy="134" r="1.8" />
+        <circle class="solid" cx="138" cy="134" r="1.8" />
+        <circle class="solid" cx="147" cy="134" r="1.8" />
+        <rect class="fill" x="110" y="156" width="54" height="20" rx="4" />
+        <rect class="dim" x="248" y="86" width="34" height="34" rx="3" />
+        <path class="dim" d="M248 134h34M248 145h22M248 156h30" />
+        <path d="M32 98l-10 12 10 12M46 98l10 12-10 12" />
+        <path class="dim" d="M92 196H38v79" />
+      </g>
+    )
+  }
+  {
+    n === 5 && (
+      <g>
+        {rows.map((row) => (
+          <g>
+            <circle class={row.hot ? 'solid' : 'dim'} cx="100" cy={row.y} r="3.2" />
+            <path class={row.hot ? '' : 'dim'} d={`M114 ${row.y}h${row.len}`} />
+            <rect class={row.hot ? 'fill hot' : 'dim'} x="262" y={row.y - 6} width="30" height="12" rx="3" />
+          </g>
+        ))}
+        <path class="dim" d="M96 236h196" />
+        {bars.map((bar) => (
+          <path class={bar.hot ? 'bar' : 'bar dim'} d={`M${bar.x} 236v${-bar.h}`} />
+        ))}
+        <path d="M24 60v176M24 60h9M24 104h5M24 148h9M24 192h5M24 236h9" />
+        <path class="dim" d="M38 275v-39h58" />
+      </g>
+    )
+  }
+  <circle cx="38" cy="282" r="7"></circle>
+  <circle class="solid" cx="38" cy="282" r="2.4"></circle>
+</svg>
+
+<style>
+  .art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    overflow: visible;
+  }
+
+  .fill {
+    fill: currentColor;
+    fill-opacity: 0.16;
+  }
+
+  .hot {
+    fill-opacity: 0.55;
+  }
+
+  .solid {
+    fill: currentColor;
+    stroke: none;
+  }
+
+  .dim {
+    stroke-opacity: 0.5;
+  }
+
+  .dimmer {
+    stroke-opacity: 0.32;
+  }
+
+  .dimmest {
+    stroke-opacity: 0.18;
+  }
+
+  .dash {
+    stroke-dasharray: 3 5;
+    stroke-opacity: 0.7;
+  }
+
+  .bar {
+    stroke-width: 6;
+    stroke-linecap: butt;
+  }
+
+  /* Dashes show traffic; they only travel while the plate is exposed. */
+  .flow {
+    stroke-dasharray: 4 7;
+  }
+
+  :global(.plate.is-active) .flow {
+    animation: flow 1.4s linear infinite;
+  }
+
+  @keyframes flow {
+    to {
+      stroke-dashoffset: -22;
+    }
+  }
+</style>

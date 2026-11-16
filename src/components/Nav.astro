@@ -1,0 +1,186 @@
+---
+// Nav.astro - Fixed header with section links and the command palette trigger.
+import Icon from './Icon.astro';
+import { nav, person } from '../data/site';
+---
+
+<header class="nav">
+  <div class="wrap nav__row">
+    <a class="brand" href="#top" aria-label={`${person.name} - back to top`}>
+      <img src="/favicon.png" width="30" height="30" alt="" />
+      <span>{person.name}</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Sections">
+      {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+
+    <button class="nav__cmd" type="button" data-palette-open aria-haspopup="dialog">
+      <span class="nav__cmd-search"><Icon name="search" /></span>
+      <span class="nav__cmd-menu"><Icon name="menu" /></span>
+      <span class="nav__cmd-text">Jump to</span>
+      <kbd data-kbd>Ctrl K</kbd>
+    </button>
+  </div>
+  <span class="nav__progress" aria-hidden="true"></span>
+</header>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    height: var(--nav-h);
+    background: color-mix(in oklab, var(--abyss) 76%, transparent);
+    backdrop-filter: blur(16px) saturate(1.3);
+    -webkit-backdrop-filter: blur(16px) saturate(1.3);
+    border-bottom: 1px solid color-mix(in oklab, var(--rivet) 70%, transparent);
+  }
+
+  .nav__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    height: 100%;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-weight: 700;
+    font-stretch: 112%;
+    letter-spacing: -0.01em;
+  }
+
+  /* The logo is neutralised so it sits inside the palette. */
+  .brand img {
+    width: 1.875rem;
+    height: 1.875rem;
+    filter: grayscale(1) brightness(1.25) contrast(1.05);
+    transition: rotate 0.8s var(--ease-out);
+  }
+
+  .brand:hover img {
+    rotate: 120deg;
+  }
+
+  .nav__links {
+    display: flex;
+    gap: clamp(1rem, 2.4vw, 2rem);
+  }
+
+  .nav__links a {
+    position: relative;
+    padding-block: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 560;
+    color: var(--fog);
+    transition: color 0.2s;
+  }
+
+  .nav__links a::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--ember), var(--bone) 50%, var(--signal));
+    scale: 0 1;
+    transform-origin: left;
+    transition: scale 0.4s var(--ease-out);
+  }
+
+  .nav__links a:hover,
+  .nav__links a[aria-current='true'] {
+    color: var(--bone);
+  }
+
+  .nav__links a:hover::after,
+  .nav__links a[aria-current='true']::after {
+    scale: 1 1;
+  }
+
+  .nav__cmd {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    height: 2.4rem;
+    padding: 0 0.55rem 0 0.75rem;
+    border: 1px solid var(--rivet-2);
+    border-radius: 0.65rem;
+    background: var(--hull);
+    color: var(--fog);
+    font-size: 0.85rem;
+    font-weight: 560;
+    transition:
+      color 0.2s,
+      border-color 0.2s,
+      background 0.2s;
+  }
+
+  .nav__cmd:hover {
+    color: var(--bone);
+    border-color: var(--fog);
+    background: var(--hull-2);
+  }
+
+  .nav__cmd-menu {
+    display: none;
+  }
+
+  kbd {
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.35rem;
+    background: var(--rivet);
+    color: var(--bone);
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+  }
+
+  .nav__progress {
+    position: absolute;
+    inset: auto 0 -1px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--ember), var(--bone) 50%, var(--signal));
+    transform-origin: left;
+    scale: 0 1;
+  }
+
+  /* Scroll position drives the progress line without JavaScript. */
+  @supports (animation-timeline: scroll()) {
+    .nav__progress {
+      animation: progress linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+
+  @keyframes progress {
+    to {
+      scale: 1 1;
+    }
+  }
+
+  @media (max-width: 52rem) {
+    .nav__links,
+    .nav__cmd-search,
+    kbd {
+      display: none;
+    }
+
+    .nav__cmd-menu {
+      display: block;
+    }
+
+    .nav__cmd {
+      padding-inline: 0.75rem;
+    }
+
+    .nav__cmd-text {
+      font-size: 0.85rem;
+    }
+  }
+</style>

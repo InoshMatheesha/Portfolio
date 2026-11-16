@@ -1,0 +1,269 @@
+---
+// CommandPalette.astro - Keyboard-first jump menu over sections, projects and writing.
+import Icon from './Icon.astro';
+import { projects } from '../data/projects';
+import { articles } from '../data/writing';
+import { contact, nav } from '../data/site';
+
+const groups = [
+  {
+    title: 'Sections',
+    items: nav.map((item) => ({ label: item.label, hint: 'Section', href: item.href, external: false })),
+  },
+  {
+    title: 'Projects',
+    items: projects.map((project) => ({
+      label: project.name,
+      hint: project.type,
+      href: `#project-${project.id}`,
+      external: false,
+    })),
+  },
+  {
+    title: 'Writing',
+    items: articles.map((article) => ({
+      label: article.title,
+      hint: `${article.minutes} min`,
+      href: article.href,
+      external: true,
+    })),
+  },
+  {
+    title: 'Links',
+    items: [
+      { label: 'GitHub', hint: contact.github.label, href: contact.github.href, external: true },
+      { label: 'LinkedIn', hint: contact.linkedin.label, href: contact.linkedin.href, external: true },
+      { label: 'Medium', hint: contact.medium.label, href: contact.medium.href, external: true },
+      { label: 'Send an email', hint: contact.email, href: `mailto:${contact.email}`, external: false },
+    ],
+  },
+];
+---
+
+<dialog class="palette" data-palette aria-label="Jump to">
+  <div class="palette__box">
+    <label class="palette__field">
+      <Icon name="search" />
+      <span class="sr-only">Search sections, projects and writing</span>
+      <input
+        type="text"
+        placeholder="Search sections, projects, writing"
+        autocomplete="off"
+        spellcheck="false"
+        data-palette-input
+        role="combobox"
+        aria-expanded="true"
+        aria-controls="palette-list"
+        aria-autocomplete="list"
+      />
+      <kbd>Esc</kbd>
+    </label>
+
+    <div class="palette__list" id="palette-list" role="listbox" data-palette-list>
+      {
+        groups.map((group) => (
+          <div class="palette__group" role="group" aria-label={group.title} data-palette-group>
+            <p class="mono" aria-hidden="true">{group.title}</p>
+            {group.items.map((item) => (
+              <a
+                class="palette__item"
+                role="option"
+                aria-selected="false"
+                href={item.href}
+                target={item.external ? '_blank' : undefined}
+                rel={item.external ? 'noopener noreferrer' : undefined}
+                data-palette-item
+              >
+                <span class="palette__label">{item.label}</span>
+                <span class="palette__hint mono">{item.hint}</span>
+                <Icon name={item.external ? 'external' : 'arrow'} />
+              </a>
+            ))}
+          </div>
+        ))
+      }
+      <p class="palette__empty" data-palette-empty hidden>Nothing matches. Try a project name or a section.</p>
+    </div>
+
+    <p class="palette__foot mono" aria-hidden="true">
+      <span><kbd>&uarr;</kbd><kbd>&darr;</kbd> Move</span>
+      <span><kbd>Enter</kbd> Open</span>
+    </p>
+  </div>
+</dialog>
+
+<style>
+  .palette {
+    width: min(100% - 2rem, 38rem);
+    max-height: none;
+    margin: 12vh auto auto;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--bone);
+    overflow: visible;
+  }
+
+  .palette::backdrop {
+    background: color-mix(in oklab, var(--abyss) 72%, transparent);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .palette__box {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    max-height: 70vh;
+    border: 1px solid var(--rivet-2);
+    border-radius: 1.1rem;
+    background: var(--hull);
+    box-shadow:
+      0 3rem 6rem -2rem #000,
+      0 0 0 1px rgb(0 0 0 / 0.4);
+    overflow: hidden;
+  }
+
+  .palette[open] .palette__box {
+    animation: pop 0.32s var(--ease-out);
+  }
+
+  .palette[open]::backdrop {
+    animation: fade 0.25s ease-out;
+  }
+
+  .palette__field {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.95rem 1.1rem;
+    border-bottom: 1px solid var(--rivet);
+    color: var(--fog);
+  }
+
+  .palette__field input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: none;
+    color: var(--bone);
+    font: inherit;
+    font-size: 1.02rem;
+  }
+
+  .palette__field input::placeholder {
+    color: var(--fog);
+  }
+
+  kbd {
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.35rem;
+    background: var(--rivet);
+    color: var(--bone);
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+    font-size: 0.625rem;
+  }
+
+  .palette__list {
+    padding: 0.4rem 0.5rem 0.6rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--rivet-2) transparent;
+  }
+
+  .palette__group > p {
+    padding: 0.8rem 0.65rem 0.4rem;
+    color: var(--fog);
+  }
+
+  .palette__item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto 1rem;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.6rem 0.65rem;
+    border-radius: 0.6rem;
+    color: color-mix(in oklab, var(--bone) 80%, var(--fog));
+    scroll-margin: 2.5rem 0 0.5rem;
+  }
+
+  .palette__label {
+    overflow: hidden;
+    font-weight: 560;
+    font-size: 0.95rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .palette__hint {
+    max-width: 14rem;
+    overflow: hidden;
+    color: var(--fog);
+    font-size: 0.625rem;
+    text-overflow: ellipsis;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .palette__item :global(svg) {
+    opacity: 0;
+    translate: -0.4rem 0;
+    transition:
+      opacity 0.2s,
+      translate 0.3s var(--ease-out);
+  }
+
+  .palette__item[aria-selected='true'] {
+    background: var(--rivet);
+    color: var(--bone);
+  }
+
+  .palette__item[aria-selected='true'] :global(svg) {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .palette__empty {
+    padding: 2rem 1rem;
+    color: var(--fog);
+    text-align: center;
+  }
+
+  .palette__foot {
+    display: flex;
+    gap: 1.25rem;
+    padding: 0.7rem 1.1rem;
+    border-top: 1px solid var(--rivet);
+    color: var(--fog);
+  }
+
+  .palette__foot span {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  @keyframes pop {
+    from {
+      opacity: 0;
+      scale: 0.96;
+      translate: 0 0.75rem;
+    }
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (hover: none) {
+    .palette__foot,
+    .palette__field kbd {
+      display: none;
+    }
+  }
+</style>

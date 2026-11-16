@@ -1,0 +1,237 @@
+---
+// Profile.astro - Portrait with depth, the about text and a facts record.
+import { Picture } from 'astro:assets';
+import portrait from '../../assets/OnlyMe.webp';
+import { about, expertise, person, targetRoles } from '../data/site';
+
+const record = [
+  { term: 'Now', value: `${person.role}, ${person.employer}` },
+  { term: 'Studying', value: `${person.degree}. ${person.universityShort}, ${person.duration}.` },
+  { term: 'GPA', value: person.gpa },
+  { term: 'Based in', value: person.location },
+  { term: 'Open to', value: person.availability },
+  { term: 'Target roles', value: targetRoles.join(' / ') },
+];
+---
+
+<section class="section" id="profile" aria-labelledby="profile-title">
+  <div class="wrap profile">
+    <figure class="portrait reveal" data-tilt data-tilt-max="7">
+      <div class="portrait__inner" data-tilt-target>
+        <div class="portrait__panel">
+          <span class="portrait__disc"></span>
+        </div>
+        <div class="portrait__layer portrait__layer--img">
+          <Picture
+            src={portrait}
+            formats={['avif', 'webp']}
+            fallbackFormat="webp"
+            widths={[480, 720, 1000]}
+            sizes="(max-width: 60rem) 78vw, 30rem"
+            alt={`Portrait of ${person.name}`}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <figcaption class="portrait__layer portrait__layer--cap">
+          <p class="portrait__cap mono">
+            <span>{person.name}</span>
+            <span>{person.handle}</span>
+          </p>
+        </figcaption>
+      </div>
+    </figure>
+
+    <div class="profile__text">
+      <header class="sec-head reveal">
+        <p class="eyebrow">Profile</p>
+        <h2 id="profile-title">I learn security by building it.</h2>
+      </header>
+
+      <div class="profile__about">
+        {about.map((para) => <p class="reveal">{para}</p>)}
+      </div>
+
+      <ul class="profile__chips reveal" aria-label="Focus areas">
+        {expertise.map((item) => <li class="chip">{item}</li>)}
+      </ul>
+
+      <dl class="record">
+        {
+          record.map((row) => (
+            <div class="record__row reveal">
+              <dt class="mono">{row.term}</dt>
+              <dd>{row.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>
+
+<style>
+  .profile {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  /* --- Portrait --------------------------------------------------- */
+  .portrait {
+    position: sticky;
+    top: calc(var(--nav-h) + 4.5rem);
+    max-width: 30rem;
+    margin-top: 4.5rem;
+    perspective: 1100px;
+  }
+
+  .portrait__inner {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    transform-style: preserve-3d;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .portrait__panel {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border: 1px solid var(--rivet-2);
+    border-radius: 1.25rem;
+    background: linear-gradient(165deg, var(--hull-2), var(--hull) 70%);
+    box-shadow: 0 2.5rem 4rem -2rem rgb(0 0 0 / 0.8);
+  }
+
+  /* A disc carrying the diverging scale sits behind the head. */
+  .portrait__disc {
+    position: absolute;
+    left: 50%;
+    top: 34%;
+    width: 84%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    translate: -50% -50%;
+    background: linear-gradient(200deg, var(--signal) 8%, var(--bone) 50%, var(--ember) 92%);
+    opacity: 0.92;
+  }
+
+  /* Layers float above the panel; the scale cancels perspective growth at rest. */
+  .portrait__layer {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    pointer-events: none;
+  }
+
+  .portrait__layer--img {
+    transform: translateZ(44px) scale(0.96);
+  }
+
+  .portrait__layer--cap {
+    transform: translateZ(88px) scale(0.92);
+  }
+
+  /* The cutout overflows the top edge of the panel. */
+  .portrait :global(picture) {
+    position: absolute;
+    inset: auto 0 0;
+    clip-path: inset(-40% 1px 1px 1px round 0 0 1.2rem 1.2rem);
+  }
+
+  .portrait :global(img) {
+    width: 100%;
+    filter: saturate(0.88) contrast(1.04);
+  }
+
+  .portrait__cap {
+    position: absolute;
+    inset: auto 0.9rem 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid color-mix(in oklab, var(--bone) 16%, transparent);
+    border-radius: 0.6rem;
+    background: color-mix(in oklab, var(--abyss) 72%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .portrait__cap span + span {
+    color: var(--fog);
+    text-transform: none;
+  }
+
+  /* --- Text ------------------------------------------------------- */
+  .profile__text .sec-head {
+    margin-bottom: 2rem;
+  }
+
+  .profile__about {
+    display: grid;
+    gap: 1.1rem;
+    max-width: 40rem;
+    color: color-mix(in oklab, var(--bone) 82%, var(--fog));
+    text-wrap: pretty;
+  }
+
+  .profile__about p:first-child {
+    color: var(--bone);
+    font-size: 1.25rem;
+    line-height: 1.45;
+  }
+
+  .profile__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
+  }
+
+  .record {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--rivet);
+  }
+
+  .record__row {
+    display: grid;
+    gap: 0.3rem;
+    align-content: start;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--rivet);
+  }
+
+  .record dt {
+    color: var(--fog);
+  }
+
+  .record dd {
+    font-weight: 560;
+    line-height: 1.4;
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 60rem) {
+    .profile {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .portrait {
+      position: relative;
+      top: auto;
+      width: min(78vw, 24rem);
+      margin: 3.5rem auto 0;
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .record {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

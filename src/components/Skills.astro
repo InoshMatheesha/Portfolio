@@ -1,0 +1,283 @@
+---
+// Skills.astro - Skill matrix plus self-assessed levels as LED bar graphs.
+import { proficiency, skillGroups } from '../data/skills';
+import { labNote } from '../data/site';
+
+// Ten segments per meter; a trailing 5 lights a half segment.
+const segments = (value: number) =>
+  Array.from({ length: 10 }, (_, k) => {
+    if (value >= (k + 1) * 10) return 'on';
+    if (value >= k * 10 + 5) return 'half';
+    return 'off';
+  });
+---
+
+<section class="section" id="skills" aria-labelledby="skills-title">
+  <div class="wrap">
+    <header class="sec-head reveal">
+      <p class="eyebrow">Skills</p>
+      <h2 id="skills-title">What I work with.</h2>
+    </header>
+
+    <div class="matrix">
+      {
+        skillGroups.map((group) => (
+          <section class="matrix__col reveal">
+            <h3>{group.title}</h3>
+            <ul>
+              {group.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+
+    <div class="levels">
+      <div class="levels__head reveal">
+        <h3>Technical proficiency</h3>
+        <p class="mono">Self-assessed / one segment is 10%</p>
+      </div>
+      <ul class="levels__list" data-meters>
+        {
+          proficiency.map((entry) => (
+            <li class="meter reveal">
+              <span class="meter__label">{entry.skill}</span>
+              <span
+                class="meter__bar"
+                role="meter"
+                aria-label={entry.skill}
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow={entry.value}
+              >
+                {segments(entry.value).map((state) => (
+                  <i class={`seg seg--${state}`} />
+                ))}
+              </span>
+              <span class="meter__value mono" aria-hidden="true">
+                {entry.value}%
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <p class="note reveal">{labNote}</p>
+  </div>
+</section>
+
+<style>
+  /* --- Matrix ----------------------------------------------------- */
+  .matrix {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border: 1px solid var(--rivet);
+    border-radius: var(--radius);
+    background: color-mix(in oklab, var(--hull) 80%, transparent);
+    overflow: hidden;
+  }
+
+  .matrix__col {
+    padding: 1.5rem 1.4rem 1.6rem;
+    border-right: 1px solid var(--rivet);
+  }
+
+  .matrix__col:last-child {
+    border-right: 0;
+  }
+
+  .matrix h3 {
+    position: relative;
+    margin-bottom: 1.1rem;
+    padding-bottom: 1rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-stretch: 112%;
+    line-height: 1.2;
+  }
+
+  /* Column rule steps across the scale, offence to fundamentals. */
+  .matrix h3::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--c);
+  }
+
+  .matrix__col:nth-child(1) { --c: var(--l1); }
+  .matrix__col:nth-child(2) { --c: var(--l2); }
+  .matrix__col:nth-child(3) { --c: var(--l4); }
+  .matrix__col:nth-child(4) { --c: var(--l5); }
+
+  .matrix li {
+    padding-block: 0.6rem;
+    border-bottom: 1px dashed var(--rivet);
+    color: color-mix(in oklab, var(--bone) 78%, var(--fog));
+    font-size: 0.92rem;
+    line-height: 1.4;
+    transition:
+      color 0.2s,
+      padding-left 0.35s var(--ease-out);
+  }
+
+  .matrix li:last-child {
+    border-bottom: 0;
+  }
+
+  .matrix li:hover {
+    padding-left: 0.5rem;
+    color: var(--bone);
+  }
+
+  /* --- Levels ----------------------------------------------------- */
+  .levels {
+    display: grid;
+    grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr);
+    gap: 2rem 4rem;
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+
+  .levels__head h3 {
+    font-size: 1.5rem;
+    font-weight: 740;
+    font-stretch: 116%;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+  }
+
+  .levels__head p {
+    margin-top: 0.75rem;
+    color: var(--fog);
+  }
+
+  .levels__list {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .meter {
+    display: grid;
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) 2.75rem;
+    align-items: center;
+    gap: 1.25rem;
+    padding-block: 0.7rem;
+    border-bottom: 1px solid var(--rivet);
+  }
+
+  .meter__label {
+    font-weight: 600;
+    font-size: 0.98rem;
+    line-height: 1.3;
+  }
+
+  .meter__bar {
+    display: grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .seg {
+    position: relative;
+    height: 0.95rem;
+    border-radius: 2px;
+    background: var(--rivet);
+  }
+
+  /* The lit part of a segment is an overlay, full or half width. */
+  .seg--on::after,
+  .seg--half::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--bone);
+    box-shadow: 0 0 0.7rem -0.1rem color-mix(in oklab, var(--bone) 55%, transparent);
+  }
+
+  .seg--half::after {
+    right: 50%;
+    border-radius: 2px 0 0 2px;
+  }
+
+  /* Before the list scrolls in, segments are dark; then they light in order. */
+  .levels__list.is-armed .seg::after {
+    opacity: 0;
+  }
+
+  .levels__list.is-lit .seg::after {
+    opacity: 1;
+    transition: opacity 0.25s;
+  }
+
+  .levels__list.is-lit .seg:nth-child(2)::after { transition-delay: 0.06s; }
+  .levels__list.is-lit .seg:nth-child(3)::after { transition-delay: 0.12s; }
+  .levels__list.is-lit .seg:nth-child(4)::after { transition-delay: 0.18s; }
+  .levels__list.is-lit .seg:nth-child(5)::after { transition-delay: 0.24s; }
+  .levels__list.is-lit .seg:nth-child(6)::after { transition-delay: 0.3s; }
+  .levels__list.is-lit .seg:nth-child(7)::after { transition-delay: 0.36s; }
+  .levels__list.is-lit .seg:nth-child(8)::after { transition-delay: 0.42s; }
+  .levels__list.is-lit .seg:nth-child(9)::after { transition-delay: 0.48s; }
+  .levels__list.is-lit .seg:nth-child(10)::after { transition-delay: 0.54s; }
+
+  .meter__value {
+    color: var(--fog);
+    text-align: right;
+  }
+
+  .note {
+    margin-top: 2.5rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--ember);
+    color: var(--fog);
+    font-size: 0.92rem;
+    font-style: italic;
+  }
+
+  @media (max-width: 68rem) {
+    .matrix {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .matrix__col:nth-child(2n) {
+      border-right: 0;
+    }
+
+    .matrix__col:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--rivet);
+    }
+
+    .levels {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .matrix {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .matrix__col {
+      border-right: 0;
+      border-bottom: 1px solid var(--rivet);
+    }
+
+    .matrix__col:last-child {
+      border-bottom: 0;
+    }
+
+    .meter {
+      grid-template-columns: minmax(0, 1fr) 2.75rem;
+      gap: 0.5rem 1rem;
+    }
+
+    .meter__bar {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+  }
+</style>
