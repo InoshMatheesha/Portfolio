@@ -1,0 +1,193 @@
+/* redesign.css - "Cyber Aurora": glass, neon gradients, 3D and motion over the portfolio's base styles. */
+
+:root {
+  --fx-a: #00e5a0;
+  --fx-b: #00f5ff;
+  --fx-c: #a78bfa;
+  --fx-glass: rgba(17, 19, 28, 0.55);
+  --fx-glass-edge: rgba(255, 255, 255, 0.08);
+  --fx-glass-hi: rgba(255, 255, 255, 0.07);
+  --fx-grid: rgba(0, 229, 160, 0.16);
+  --fx-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.8);
+  --fx-spring: cubic-bezier(0.34, 1.36, 0.64, 1);
+  --fx-glide: cubic-bezier(0.22, 1, 0.36, 1);
+}
+body.light-mode {
+  --fx-a: #00a876;
+  --fx-b: #0284c7;
+  --fx-c: #7c3aed;
+  --fx-glass: rgba(255, 255, 255, 0.6);
+  --fx-glass-edge: rgba(15, 23, 42, 0.08);
+  --fx-glass-hi: rgba(255, 255, 255, 0.9);
+  --fx-grid: rgba(0, 168, 118, 0.14);
+  --fx-shadow: 0 24px 60px -30px rgba(15, 23, 42, 0.3);
+}
+
+/* ---- Background: aurora and a grid that lights up under the pointer ---- */
+.fx-aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.fx-aurora i { position: absolute; width: 50vmax; height: 50vmax; border-radius: 50%; filter: blur(110px); opacity: 0.22; will-change: transform; }
+.fx-aurora i:nth-child(1) { left: -15vmax; top: -18vmax; background: var(--fx-a); animation: fx-a 28s var(--fx-glide) infinite alternate; }
+.fx-aurora i:nth-child(2) { right: -18vmax; top: 20vh; background: var(--fx-b); animation: fx-b 34s var(--fx-glide) infinite alternate; }
+.fx-aurora i:nth-child(3) { left: 25vw; bottom: -28vmax; background: var(--fx-c); opacity: 0.16; animation: fx-c 40s var(--fx-glide) infinite alternate; }
+body.light-mode .fx-aurora i { opacity: 0.14; }
+@keyframes fx-a { to { transform: translate(18vw, 14vh) scale(1.15); } }
+@keyframes fx-b { to { transform: translate(-14vw, 20vh) scale(0.9); } }
+@keyframes fx-c { to { transform: translate(-12vw, -18vh) scale(1.12); } }
+.fx-spot {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: linear-gradient(to right, var(--fx-grid) 1px, transparent 1px), linear-gradient(to bottom, var(--fx-grid) 1px, transparent 1px);
+  background-size: 40px 40px;
+  -webkit-mask-image: radial-gradient(260px circle at var(--x, 50%) var(--y, 30%), #000, transparent 70%);
+  mask-image: radial-gradient(260px circle at var(--x, 50%) var(--y, 30%), #000, transparent 70%);
+}
+.fx-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 10000; pointer-events: none;
+  transform-origin: 0 50%; transform: scaleX(0);
+  background: linear-gradient(90deg, var(--fx-a), var(--fx-b), var(--fx-c));
+  box-shadow: 0 0 12px var(--fx-a);
+}
+
+/* ---- Navigation: a glass command bar, links in brackets on hover ---- */
+.nav {
+  background: var(--fx-glass) !important;
+  backdrop-filter: blur(22px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(170%) !important;
+  border-bottom: 1px solid var(--fx-glass-edge) !important;
+  box-shadow: inset 0 -1px 0 var(--fx-glass-hi);
+}
+.nav::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--fx-a), var(--fx-b), transparent); opacity: 0.6;
+}
+.nav-links a { position: relative; transition: color 0.25s var(--fx-glide), letter-spacing 0.35s var(--fx-spring); }
+.nav-links a::before, .nav-links a::after {
+  position: absolute; top: 50%; transform: translateY(-50%); opacity: 0; color: var(--fx-a);
+  transition: opacity 0.25s, transform 0.35s var(--fx-spring);
+}
+.nav-links a::before { content: "["; left: -10px; transform: translate(6px, -50%); }
+.nav-links a::after { content: "]"; right: -10px; transform: translate(-6px, -50%); }
+.nav-links a:hover::before, .nav-links a.fx-current::before { opacity: 1; transform: translate(0, -50%); }
+.nav-links a:hover::after, .nav-links a.fx-current::after { opacity: 1; transform: translate(0, -50%); }
+.nav-links a.fx-current { color: var(--fx-a); }
+
+/* ---- Hero ---- */
+.hero-title .line-2 { color: var(--fx-a) !important; }
+body:not(.light-mode) .hero-title .line-2 { text-shadow: 0 0 28px rgba(0, 229, 160, 0.45), 0 0 2px rgba(0, 229, 160, 0.6); }
+.hero-title .line-1, .hero-title .line-2 { display: block; animation-fill-mode: both; }
+.hero-title .line-2 { width: fit-content; }
+.hero-title .line-1 { animation: fx-rise 1s var(--fx-glide) both; }
+.hero-title .line-2 { animation: fx-rise 1s 0.12s var(--fx-glide) both; }
+@keyframes fx-rise { from { opacity: 0; transform: translateY(40%) rotateX(-40deg); filter: blur(8px); } to { opacity: 1; transform: none; filter: none; } }
+
+.terminal-window {
+  background: var(--fx-glass) !important;
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid var(--fx-glass-edge) !important;
+  box-shadow: inset 0 1px 0 var(--fx-glass-hi), var(--fx-shadow), 0 0 0 1px rgba(0, 229, 160, 0.06), 0 0 60px -20px var(--fx-a) !important;
+  transform-style: preserve-3d;
+}
+.terminal-bar { background: transparent !important; border-bottom: 1px solid var(--fx-glass-edge) !important; }
+
+/* The portrait: a rotating neon ring behind it and a scan line passing over. */
+.portrait-container { isolation: isolate; }
+.portrait-glow {
+  background: conic-gradient(from var(--fx-turn, 0deg), var(--fx-a), var(--fx-b), var(--fx-c), var(--fx-a)) !important;
+  filter: blur(60px) !important; opacity: 0.38 !important;
+  animation: fx-spin 14s linear infinite;
+}
+@property --fx-turn { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@keyframes fx-spin { to { --fx-turn: 360deg; } }
+.portrait-container::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 120px; top: -120px; z-index: 3; pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(0, 229, 160, 0.12), transparent);
+  border-bottom: 1px solid rgba(0, 229, 160, 0.35);
+  animation: fx-scan 5.5s var(--fx-glide) infinite;
+}
+@keyframes fx-scan { 0% { top: -120px; opacity: 0; } 10% { opacity: 1; } 70% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+
+.stat-pill, .social-icon-btn {
+  background: var(--fx-glass) !important;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--fx-glass-edge) !important;
+  transition: transform 0.35s var(--fx-spring), border-color 0.25s, box-shadow 0.25s !important;
+}
+.social-icon-btn:hover { border-color: var(--fx-a) !important; box-shadow: 0 0 22px -6px var(--fx-a); transform: translateY(-3px); }
+
+/* ---- Buttons: neon gradient with a light sweep, glass ghost ---- */
+.btn { position: relative; overflow: hidden; isolation: isolate; transition: transform 0.35s var(--fx-spring), box-shadow 0.3s var(--fx-glide) !important; }
+.btn.primary {
+  background: linear-gradient(110deg, var(--fx-a), var(--fx-b)) !important; color: #04130d !important; border: 0 !important;
+  box-shadow: 0 10px 30px -10px var(--fx-a), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+}
+.btn.primary:hover { box-shadow: 0 16px 40px -10px var(--fx-a), 0 0 0 1px rgba(255, 255, 255, 0.2) inset !important; }
+.btn::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 45%; z-index: -1; pointer-events: none;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.5), transparent); transform: skewX(-20deg); opacity: 0;
+}
+.btn:hover::after { animation: fx-shine 0.9s var(--fx-glide); }
+@keyframes fx-shine { from { opacity: 1; transform: skewX(-20deg) translateX(0); } to { opacity: 1; transform: skewX(-20deg) translateX(420%); } }
+.btn.ghost { background: var(--fx-glass) !important; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--fx-glass-edge) !important; }
+.btn:active { transform: scale(0.96) !important; }
+
+/* ---- Section headers: an outlined number with a gradient title rule ---- */
+.section-header { position: relative; }
+.section-num {
+  font-size: clamp(42px, 6vw, 72px) !important; line-height: 1 !important; font-weight: 700 !important;
+  color: transparent !important; -webkit-text-stroke: 1px var(--fx-a); opacity: 0.55;
+}
+.section-header::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -10px; height: 1px;
+  background: linear-gradient(90deg, var(--fx-a), var(--fx-b) 30%, transparent);
+  transform-origin: 0 50%; transform: scaleX(0); transition: transform 1.2s var(--fx-glide);
+}
+.section-header.fx-in::after { transform: scaleX(1); }
+
+/* ---- Cards: glass, a gradient edge that turns on hover, a spotlight under the pointer ---- */
+.fx-card {
+  position: relative; isolation: isolate;
+  background: var(--fx-glass) !important;
+  backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border: 1px solid var(--fx-glass-edge) !important;
+  box-shadow: inset 0 1px 0 var(--fx-glass-hi), var(--fx-shadow);
+  transform-style: preserve-3d;
+}
+.fx-card::before {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; z-index: 3; pointer-events: none;
+  background: conic-gradient(from var(--fx-turn, 0deg), transparent 0deg, var(--fx-a) 70deg, var(--fx-b) 140deg, transparent 200deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: 0; transition: opacity 0.4s var(--fx-glide);
+  animation: fx-spin 4s linear infinite;
+}
+.fx-card:hover::before { opacity: 1; }
+.fx-card .fx-glare {
+  position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 2; opacity: 0;
+  background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), rgba(0, 229, 160, 0.13), transparent 45%);
+  transition: opacity 0.3s;
+}
+.fx-card:hover .fx-glare { opacity: 1; }
+
+/* ---- Reveal: a wipe up from the bottom edge ---- */
+.fx-reveal {
+  clip-path: inset(18% 0 0 0 round 16px); opacity: 0; transform: translateY(30px);
+  transition: clip-path 1s var(--fx-glide), opacity 0.8s var(--fx-glide), transform 1s var(--fx-spring);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.fx-reveal.fx-in { clip-path: inset(0 0 0 0 round 16px); opacity: 1; transform: none; }
+
+@media (max-width: 900px) {
+  .fx-spot { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fx-aurora i, .portrait-glow, .portrait-container::after, .hero-title .line-1, .hero-title .line-2, .fx-card::before, .btn:hover::after { animation: none !important; }
+  .fx-reveal { clip-path: none; opacity: 1; transform: none; transition: none; }
+}
+
+/* ---- Light mode: white text on the deeper green and blue, so every button reads ---- */
+body.light-mode .btn.primary { background: linear-gradient(110deg, #007a57, #0369a1) !important; color: #ffffff !important; }
+body.light-mode .try-btn { color: #ffffff; }
+body.light-mode .cv-download { color: #00664a; }
+body.light-mode .try-btn { background-image: linear-gradient(110deg, #007a57 0%, #0369a1 48%, #6d28d9 100%); }
+body.light-mode .cv-download, body.light-mode .cv-download span { color: #00664a !important; }
+body.light-mode .try-btn .try-btn-sub { color: rgba(255, 255, 255, 0.94); opacity: 1; }

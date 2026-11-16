@@ -43,10 +43,10 @@ body.light-mode {
   --text: #0f172a;
   --text-muted: #334155;
   --text-dim: #64748b;
-  --accent: #00a876;
-  --accent-dim: #00875e;
+  --accent: #007a57;
+  --accent-dim: #00664a;
   --accent-glow: rgba(0, 168, 118, 0.18);
-  --accent-cyan: #0284c7;
+  --accent-cyan: #0369a1;
   --accent-cyan-glow: rgba(2, 132, 199, 0.15);
 }
 
